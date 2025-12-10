@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Recuperar Contraseña{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mt-4 mb-3">Restablecer Contraseña</h2>
+    <p>Ingresa tu dirección de correo electrónico a continuación. Te enviaremos un enlace para que puedas establecer una nueva contraseña.</p>
+    
+    <form method="post" action="{% url 'apps.usuario:password_reset' %}">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            <label for="{{ form.email.id_for_label }}">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="alert alert-danger mt-1">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar enlace de restablecimiento</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+asgiref
+backports.entry-points-selectable
+crispy-bootstrap5
+distlib
+Django
+django-crispy-forms
+filelock
+Pillow
+platformdirs
+six
+sqlparse
+tzdata
+# virtualenv

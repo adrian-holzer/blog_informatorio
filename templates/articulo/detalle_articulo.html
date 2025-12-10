@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ articulo.titulo }}{% endblock %}
+
+{% block content %}
+<style>
+    .article-content {
+        line-height: 1.8; /* Aumenta el interlineado */
+        font-size: 1.15rem; /* Hace la letra ligeramente más grande */
+    }
+    .article-content p {
+        max-width: 75ch; 
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 1.5rem; /* Espacio extra entre párrafos */
+    }
+    .article-header {
+        border-bottom: 1px solid #eee; 
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem !important;
+    }
+    .action-bar {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row">
+        
+        {# Contenedor principal del artículo centrado #}
+        <div class="col-lg-10 col-xl-8 mx-auto">
+
+           
+            <div class="card shadow-lg p-4 p-md-5 mb-5 border-0">
+                
+                <header class="text-center article-header">
+                    {# TÍTULO #}
+                    <h1 class="display-5 fw-bolder mb-3">{{ articulo.titulo }}</h1>
+
+                    {# METADATOS COMPACTOS #}
+                    <p class="text-muted small mb-0">
+                        <i class="bi bi-person-fill"></i> Por <a href="#" class="fw-semibold text-decoration-none">{{ articulo.editor.username }}</a>
+                        | <i class="bi bi-calendar"></i> {{ articulo.fecha_publicacion|date:"d M, Y" }}
+                        {% if articulo.categoria %}
+                        | <span class="badge bg-primary text-light">{{ articulo.categoria.nombre }}</span>
+                        {% endif %}
+                    </p>
+                </header>
+
+                {% if articulo.imagen %}
+                <div class="text-center mb-4">
+                    <img src="{{ articulo.imagen.url }}" alt="{{ articulo.titulo }}" class="img-fluid rounded shadow-sm"
+                        style="max-height: 450px; width: 100%; object-fit: cover;">
+                </div>
+                {% endif %}
+
+                <div class="article-content text-dark mt-4">
+                    {{ articulo.contenido|linebreaksbr }}
+                </div>
+            </div>
+
+
+            <div class="d-flex justify-content-between align-items-center action-bar border-top border-bottom mb-5">
+                
+                {# Botón de VOLVER #}
+                <a href="{% url 'apps.articulo:lista_articulos' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver a la Lista
+                </a>
+
+                {# Botones de ACCIÓN (Editar/Eliminar) #}
+                <div class="d-flex">
+                    {% if can_edit %}
+                        <a href="{% url 'apps.articulo:editar_articulo' pk=articulo.pk %}" class="btn btn-primary me-2">
+                            <i class="bi bi-pencil"></i> Editar Artículo
+                        </a>
+                        
+                        {# Usaremos el botón del MODAL para la eliminación suave aquí #}
+                        <button type="button" 
+                                class="btn btn-danger" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#confirmDeleteModal{{ articulo.pk }}">
+                            <i class="bi bi-trash"></i> Desactivar
+                        </button>
+                        
+                    {% else %}
+                        {# Si no hay permisos, dejar un espacio vacío o un botón de acción social, etc. #}
+                        <div></div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            
+            {# ---------------------------------------------------- #}
+            {# 4. SECCIÓN DE COMENTARIOS#}
+            {# ---------------------------------------------------- #}
+            
+            
+            
+        </div>
+    </div>
+</div>
+
+{# ---------------------------------------------------- #}
+{# MODAL DE CONFIRMACIÓN DE DESACTIVACIÓN  #}
+{# ---------------------------------------------------- #}
+<div class="modal fade" id="confirmDeleteModal{{ articulo.pk }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Desactivación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ¿Estás **seguro** que deseas desactivar el artículo <strong>"{{ articulo.titulo }}"</strong>? 
+          Dejará de ser visible en el blog (Eliminación Suave).
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          
+          <form method="post" action="{% url 'apps.articulo:eliminar_articulo' pk=articulo.pk %}" style="display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Sí, Desactivar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

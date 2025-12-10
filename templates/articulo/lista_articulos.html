@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Artículos{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Artículos del Blog</h1>
+
+    {# Botón CREAR (Visible solo para usuarios logueados) #}
+    {% if user.is_authenticated %}
+    <div class="d-flex justify-content-end mb-4">
+        <a href="{% url 'apps.articulo:crear_articulo' %}" class="btn btn-success">
+            + Crear Nuevo Artículo
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        {% for data in articulos_data %}
+        {% with articulo=data.articulo can_edit=data.can_edit %}
+
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <div class="row g-0">
+
+                        {# COLUMNA 1: IMAGEN #}
+                        {% if articulo.imagen %}
+                        <div class="col-md-3 d-flex align-items-center justify-content-center">
+                            <img src="{{ articulo.imagen.url }}" alt="{{ articulo.titulo }}"
+                                class="img-fluid rounded me-3"
+                                style="max-width: 100%; height: 120px; object-fit: cover;">
+                        </div>
+                        {% endif %}
+
+                        {# COLUMNA 2: TEXTO Y METADATOS #}
+                        {# Ajustamos el ancho si hay imagen (col-md-9) o si no la hay (col-md-12) #}
+                        <div class="{% if articulo.imagen %}col-md-9{% else %}col-md-12{% endif %}">
+
+                            <h3 class="card-title mb-2">
+                                <a href="{% url 'apps.articulo:detalle_articulo' pk=articulo.pk %}"
+                                    class="text-decoration-none">
+                                    {{ articulo.titulo }}
+                                </a>
+                            </h3>
+                            <h5 class="card-text">
+                                {{ articulo.categoria }}
+                            </h5>
+                            <p class="card-text text-muted small mb-2">
+                                Publicado por: {{ articulo.editor.username }} el
+                                <strong>{{ articulo.fecha_publicacion|date:"d M, Y" }}</strong>
+                            </p>
+
+
+                            <p class="card-text">
+                                {{ articulo.contenido|truncatewords:30 }}
+                            </p>
+
+                            <div class="mt-3">
+                                {# Botones de ACCIÓN (Editar/Eliminar) #}
+                                {% if user.is_authenticated and can_edit %}
+                                <a href="{% url 'apps.articulo:editar_articulo' pk=articulo.pk %}"
+                                    class="btn btn-sm btn-outline-primary me-2">
+                                    Editar
+                                </a>
+                                <a href="{% url 'apps.articulo:eliminar_articulo' pk=articulo.pk %}"
+                                    class="btn btn-sm btn-outline-danger me-3">
+                                    Eliminar
+                                </a>
+                                {% endif %}
+
+                                <a href="{% url 'apps.articulo:detalle_articulo' pk=articulo.pk %}"
+                                    class="btn btn-sm btn-info">
+                                    Leer más
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endwith %}
+        {% empty %}
+        <div class="col-12">
+            <p class="alert alert-info">No hay artículos publicados todavía.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

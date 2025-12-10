@@ -1,0 +1,85 @@
+{% extends 'base.html' %} 
+
+{% block title %}Página Principal - Blog{% endblock %}
+
+{% block content %}
+<header class="p-5 mb-4 bg-light rounded-3 text-center">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Bienvenido a Nuestro Blog</h1>
+        <p class="col-md-8 fs-4 mx-auto">
+            Explora artículos interesantes, aprende cosas nuevas y únete a la conversación.
+            Regístrate para comentar y colaborar.
+        </p>
+        
+        {# Lógica condicional para mostrar el botón solo si el usuario NO está autenticado #}
+        {% if not user.is_authenticated %}
+            <a href="{% url 'apps.usuario:login' %}" class="btn btn-primary btn-lg mt-3">
+                Iniciar Sesión
+            </a>
+            <a href="{% url 'apps.usuario:registrar' %}" class="btn btn-outline-secondary btn-lg mt-3 ms-2">
+                Crear Cuenta
+            </a>
+        {% else %}
+            <p class="mt-4 fs-5 text-success">
+                ¡Estás conectado! Explora nuestros artículos.
+            </p>
+        {% endif %}
+    </div>
+</header>
+
+<div class="row">
+    {# Columna Principal para Artículos #}
+    <div class="col-lg-8">
+        <h2>Últimos Artículos</h2>
+        <hr>
+        
+        {# Aquí deberías iterar sobre una lista de artículos (ej: object_list) si usas una ListView #}
+        {# Ejemplo de un artículo estático #}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Título del Artículo de Ejemplo</h3>
+                <p class="card-text">
+                    Este es el contenido resumido de un post de blog. Aquí el visitante puede leer 
+                    una introducción y decidir si quiere entrar al artículo completo.
+                </p>
+                <a href="#" class="btn btn-sm btn-outline-primary">Leer más →</a>
+                <div class="text-muted fst-italic mt-2">Publicado por [Autor] el [Fecha]</div>
+            </div>
+        </div>
+        
+        {# Puedes añadir más divs de 'card' aquí para simular la lista #}
+        
+    </div>
+
+    {# Barra Lateral (Sidebar) #}
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">Categorías</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <ul class="list-unstyled mb-0">
+                            <li><a href="#">Tecnología</a></li>
+                            <li><a href="#">Diseño</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <ul class="list-unstyled mb-0">
+                            <li><a href="#">Tutoriales</a></li>
+                            <li><a href="#">Noticias</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Aquí puedes añadir más widgets de la barra lateral, como "Acerca de" o "Archivos" #}
+        <div class="card mb-4">
+            <div class="card-header">Sobre Nosotros</div>
+            <div class="card-body">
+                Somos una comunidad dedicada a compartir conocimiento sobre Django y desarrollo web.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

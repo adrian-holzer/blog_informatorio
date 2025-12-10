@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <h2 class="mt-4 mb-3">Iniciar Sesión</h2>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                {# Mostrar errores del formulario (si el login falla) #}
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        Tu nombre de usuario o contraseña son incorrectos.
+                    </div>
+                {% endif %}
+                
+                {% for field in form %}
+                <div class="form-group mb-3">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-success btn-block">Ingresar</button>
+                
+                {# Campo oculto para la redirección después del login #}
+                {% if next %}
+                <input type="hidden" name="next" value="{{ next }}" />
+                {% endif %}
+            </form>
+
+           
+            <p>
+                ¿No tienes cuenta? <a href="{% url 'apps.usuario:registrar' %}">Regístrate aquí</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

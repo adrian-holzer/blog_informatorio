@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Artículo{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Eliminar Artículo</h1>
+
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="alert alert-warning text-center">
+                <p class="lead">¿Estás seguro que deseas eliminar el artículo:</p>
+                <strong>"{{ articulo.titulo }}"</strong>
+                <p>Esta acción es irreversible.</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-danger btn-lg">Sí, Eliminar Permanentemente</button>
+                    <a href="{% url 'apps.articulo:lista_articulos' %}" class="btn btn-secondary btn-lg">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
