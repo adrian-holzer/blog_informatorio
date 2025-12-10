@@ -1,7 +1,18 @@
-/* Prueba para verificar la conexión CSS */
-/*body {
-    background-color: #0f6ec1; /* Color celeste muy suave */
+/*
+ * 1. REGLAS DE CONFIGURACIÓN (PRUEBAS COMENTADAS)
+ * Este bloque contiene las pruebas de color anteriores.
+*/
+/* body {
+    background-color: #f0f8ff; 
     margin: 0;
     padding: 0;
-} 
+} */
+
+
+/*
+ * 2. REGLAS DE ESTÉTICA (FUENTES)
+ * Aplicación de la fuente Rajdhani a todo el sitio.
 */
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Rajdhani', sans-serif !important;
+}
