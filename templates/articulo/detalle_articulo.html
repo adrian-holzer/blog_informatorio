@@ -5,20 +5,26 @@
 {% block content %}
 <style>
     .article-content {
-        line-height: 1.8; /* Aumenta el interlineado */
-        font-size: 1.15rem; /* Hace la letra ligeramente más grande */
+        line-height: 1.8;
+        /* Aumenta el interlineado */
+        font-size: 1.15rem;
+        /* Hace la letra ligeramente más grande */
     }
+
     .article-content p {
-        max-width: 75ch; 
+        max-width: 75ch;
         margin-left: auto;
         margin-right: auto;
-        margin-bottom: 1.5rem; /* Espacio extra entre párrafos */
+        margin-bottom: 1.5rem;
+        /* Espacio extra entre párrafos */
     }
+
     .article-header {
-        border-bottom: 1px solid #eee; 
+        border-bottom: 1px solid #eee;
         padding-bottom: 1.5rem;
         margin-bottom: 2rem !important;
     }
+
     .action-bar {
         padding-top: 1.5rem;
         padding-bottom: 1.5rem;
@@ -27,20 +33,21 @@
 
 <div class="container py-5">
     <div class="row">
-        
+
         {# Contenedor principal del artículo centrado #}
         <div class="col-lg-10 col-xl-8 mx-auto">
 
-           
+
             <div class="card shadow-lg p-4 p-md-5 mb-5 border-0">
-                
+
                 <header class="text-center article-header">
                     {# TÍTULO #}
                     <h1 class="display-5 fw-bolder mb-3">{{ articulo.titulo }}</h1>
 
                     {# METADATOS COMPACTOS #}
                     <p class="text-muted small mb-0">
-                        <i class="bi bi-person-fill"></i> Por <a href="#" class="fw-semibold text-decoration-none">{{ articulo.editor.username }}</a>
+                        <i class="bi bi-person-fill"></i> Por <a href="#" class="fw-semibold text-decoration-none">
+                            {{articulo.editor }}</a>
                         | <i class="bi bi-calendar"></i> {{ articulo.fecha_publicacion|date:"d M, Y" }}
                         {% if articulo.categoria %}
                         | <span class="badge bg-primary text-light">{{ articulo.categoria.nombre }}</span>
@@ -62,7 +69,7 @@
 
 
             <div class="d-flex justify-content-between align-items-center action-bar border-top border-bottom mb-5">
-                
+
                 {# Botón de VOLVER #}
                 <a href="{% url 'apps.articulo:lista_articulos' %}" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Volver a la Lista
@@ -71,59 +78,203 @@
                 {# Botones de ACCIÓN (Editar/Eliminar) #}
                 <div class="d-flex">
                     {% if can_edit %}
-                        <a href="{% url 'apps.articulo:editar_articulo' pk=articulo.pk %}" class="btn btn-primary me-2">
-                            <i class="bi bi-pencil"></i> Editar Artículo
-                        </a>
-                        
-                        {# Usaremos el botón del MODAL para la eliminación suave aquí #}
-                        <button type="button" 
-                                class="btn btn-danger" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#confirmDeleteModal{{ articulo.pk }}">
-                            <i class="bi bi-trash"></i> Desactivar
-                        </button>
-                        
+                    <a href="{% url 'apps.articulo:editar_articulo' pk=articulo.pk %}" class="btn btn-primary me-2">
+                        <i class="bi bi-pencil"></i> Editar Artículo
+                    </a>
+
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                        data-bs-target="#confirmDeleteModal{{ articulo.pk }}">
+                        <i class="bi bi-trash"></i> Desactivar
+                    </button>
+
                     {% else %}
-                        {# Si no hay permisos, dejar un espacio vacío o un botón de acción social, etc. #}
-                        <div></div>
+                    {# Si no hay permisos, dejar un espacio vacío o un botón de acción social, etc. #}
+                    <div></div>
                     {% endif %}
                 </div>
             </div>
-            
-            
+
             {# ---------------------------------------------------- #}
-            {# 4. SECCIÓN DE COMENTARIOS#}
+            {# 4. SECCIÓN DE COMENTARIOS #}
             {# ---------------------------------------------------- #}
-            
-            
-            
+            <div class="mt-5 pt-4">
+                <h3 class="mb-4 fw-bold">Comentarios ({{ comentarios_data|length }})</h3>
+
+                {# A. FORMULARIO DE CREACIÓN #}
+                {% if user.is_authenticated and comentario_form %}
+                <form method="post" action="{% url 'apps.articulo:detalle_articulo' pk=articulo.pk %}"
+                    class="mb-5 p-3 border rounded bg-light">
+                    {% csrf_token %}
+                    <h5 class="fw-semibold mb-3">Deja tu opinión:</h5>
+
+                    <div class="mb-3">
+                        {{ comentario_form.texto }}
+                        {% for error in comentario_form.texto.errors %}
+                        <div class="alert alert-danger mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-sm">Publicar Comentario</button>
+                </form>
+                {% elif not user.is_authenticated %}
+                <p class="alert alert-info">Debes <a href="{% url 'login' %}">iniciar sesión</a> para comentar.</p>
+                {% endif %}
+
+                <div class="mt-4">
+                    {% for data in comentarios_data %}
+                    {% with comentario=data.comentario can_manage=data.can_manage %}
+
+
+                    {# ---------------------------------------------------- #}
+                    {# MODAL DE EDICIÓN DE COMENTARIO (Para usar dentro del bucle) #}
+                    {# ---------------------------------------------------- #}
+                    {% if can_manage %}
+                    <div class="modal fade" id="editComentarioModal{{ comentario.pk }}" tabindex="-1"
+                        aria-labelledby="editComentarioModalLabel{{ comentario.pk }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <form method="post"
+                                    action="{% url 'apps.comentario:editarComentario' pk_comentario=comentario.pk %}">
+                                    {% csrf_token %}
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editComentarioModalLabel{{ comentario.pk }}">Editar
+                                            Comentario</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <p class="text-muted">Editando comentario de <strong>
+                                            {{ comentario.usuario.username }}</strong>:</p>
+
+                                        
+                                        <textarea name="texto" class="form-control" rows="3"
+                                            required>{{ comentario.texto }}</textarea>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {# ---------------------------------------------------- #}
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body list-group-item d-flex gap-3 py-3">
+                            {% if comentario.usuario.imagen %}
+                            <img src="{{ comentario.usuario.imagen.url }}" style="width:40px; height: 40px;" width="40"
+                                height="40" class="rounded-circle flex-shrink-0">
+                            {% else %}
+                            <div style="width:40px; height: 40px;"
+                                class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white flex-shrink-0">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            {% endif %}
+
+                            <div class="d-flex gap-2 w-100 justify-content-between">
+                                <div class="container p-0">
+                                    <h6 class="mb-0">{{ comentario.usuario.username }}</h6>
+                                    <small class="opacity-50 text-nowrap">{{ comentario.fecha }}</small>
+                                    <p class="mb-0 text-break opacity-75">{{ comentario.texto|linebreaksbr }}</p>
+                                </div>
+
+                                                                <section>
+                                                                        {% if can_manage %}
+                                                                        {# 1. BOTÓN DE EDICIÓN: Apunta a la URL única #}
+                                                                        <button style="font-size: small;" type="button"
+                                        class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal"
+                                        data-bs-target="#editComentarioModal{{ comentario.pk }}">
+                                        Editar
+                                    </button>
+                                                                       
+                                                                        <button style="font-size: small;" type="button"
+                                        class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteComentarioModal{{ comentario.pk }}">
+                                                                                Eliminar
+                                                                            </button>
+                                                                        {% endif %}
+                                                                    </section>
+
+                                {# ---------------------------------------------------- #}
+                                {# MODAL DE CONFIRMACIÓN PARA ELIMINAR CADA COMENTARIO #}
+                                {# ---------------------------------------------------- #}
+                                {% if can_manage %}
+                                <div class="modal fade" id="confirmDeleteComentarioModal{{ comentario.pk }}"
+                                    tabindex="-1" aria-labelledby="confirmDeleteComentarioModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirmDeleteComentarioModalLabel">Confirmar
+                                                    Eliminación de Comentario</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ¿Estás seguro que deseas eliminar este comentario de <strong>
+                                                    {{comentario.usuario.username}}</strong>?
+                                                <p class="text-danger small mt-2">Esta acción no se puede deshacer.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancelar</button>
+
+                                                <form method="post"
+                                                    action="{% url 'apps.comentario:eliminarComentario' pk_comentario=comentario.pk %}"
+                                                    style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endwith %}
+                    {% empty %}
+                    <p class="text-muted text-center">Sé el primero en comentar este artículo.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>
 
-{# ---------------------------------------------------- #}
-{# MODAL DE CONFIRMACIÓN DE DESACTIVACIÓN  #}
-{# ---------------------------------------------------- #}
-<div class="modal fade" id="confirmDeleteModal{{ articulo.pk }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmDeleteModal{{ articulo.pk }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Desactivación</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Desactivación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás **seguro** que deseas desactivar el artículo <strong>"{{ articulo.titulo }}"</strong>?
+                Dejará de ser visible en el blog (Eliminación Suave).
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+                <form method="post" action="{% url 'apps.articulo:eliminar_articulo' pk=articulo.pk %}"
+                    style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Sí, Desactivar</button>
+                </form>
+            </div>
         </div>
-        <div class="modal-body">
-          ¿Estás **seguro** que deseas desactivar el artículo <strong>"{{ articulo.titulo }}"</strong>? 
-          Dejará de ser visible en el blog (Eliminación Suave).
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          
-          <form method="post" action="{% url 'apps.articulo:eliminar_articulo' pk=articulo.pk %}" style="display: inline;">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-danger">Sí, Desactivar</button>
-          </form>
-        </div>
-      </div>
     </div>
 </div>
 {% endblock %}

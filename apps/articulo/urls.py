@@ -15,4 +15,5 @@ urlpatterns = [
     path('<int:pk>/editar/', views.editar_articulo, name='editar_articulo'),
     
     path('<int:pk>/eliminar/', views.eliminar_articulo, name='eliminar_articulo'),
+    
 ]
