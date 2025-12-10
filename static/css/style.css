@@ -16,3 +16,16 @@
 body, h1, h2, h3, h4, h5, h6 {
     font-family: 'Rajdhani', sans-serif !important;
 }
+
+/* 3. EFECTO 3D (SOMBRAS) */
+.card, .jumbotron {
+    /* Aumentamos la opacidad y el desplazamiento para una sombra más visible */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), /* Sombra más grande y visible */
+                0 12px 30px rgba(0, 0, 0, 0.15); /* Sombra más profunda */
+    transition: transform 0.3s ease;
+}
+
+/* Aumentamos el "salto" para que sea notorio */
+.card:hover {
+    transform: translateY(-5px); /* Ahora salta 5px (antes 3px) */
+}
