@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
-from .models import Articulo
+from .models import Articulo, Categoria
 from .forms import ArticuloForm
 from django.contrib.auth.models import Group 
 from apps.comentario.forms import ComentarioForm 
@@ -17,35 +17,51 @@ def es_colaborador(user):
     except Group.DoesNotExist:
         return False
 
-# Lista de articulos activos 
 
 def lista_articulos(request):
-    articulos_qs = Articulo.objects.filter(activo=True)
-    articulos_data = []
-    user = request.user
     
-    
-    is_colab = es_colaborador(user)
-    is_super = user.is_superuser
-    
-    for articulo in articulos_qs:
-       
-        can_edit = False
-        if user.is_authenticated:
-            es_dueno = (articulo.editor == user)
+    articulos = Articulo.objects.filter(activo=True)
+  
+    filtro_categoria = request.GET.get('categoria', None) 
+    orden_por = request.GET.get('orden', 'fecha_desc') 
+    if filtro_categoria:
+        try:
+            articulos = articulos.filter(categoria__pk=int(filtro_categoria))
+        except ValueError:
+            pass 
             
-            if es_dueno or is_colab or is_super:
-                can_edit = True
-        
+    if orden_por == 'fecha_asc':
+        articulos = articulos.order_by('fecha_publicacion')
+    elif orden_por == 'fecha_desc':
+        articulos = articulos.order_by('-fecha_publicacion') 
+    elif orden_por == 'titulo_asc':
+        articulos = articulos.order_by('titulo') 
+    elif orden_por == 'titulo_desc':
+        articulos = articulos.order_by('-titulo') 
+    
+    todas_las_categorias = Categoria.objects.all()
+    
+    articulos_data = []
+    for articulo in articulos:
+        can_edit = False
+        if request.user.is_authenticated:
+            is_owner = (articulo.editor == request.user)
+            is_superuser_or_colab = request.user.is_superuser 
+            can_edit = is_owner or is_superuser_or_colab
+
         articulos_data.append({
             'articulo': articulo,
-            'can_edit': can_edit
+            'can_edit': can_edit,
         })
         
-    contexto = {'articulos_data': articulos_data} 
+    contexto = {
+        'articulos_data': articulos_data,
+        'categorias': todas_las_categorias,
+        'filtro_categoria_actual': filtro_categoria, 
+        'orden_actual': orden_por,
+    }
+    
     return render(request, 'articulo/lista_articulos.html', contexto)
-
-#  Muestra un artículo específico.
 
 def detalle_articulo(request, pk):
     articulo = get_object_or_404(Articulo, pk=pk, activo=True)
@@ -65,7 +81,6 @@ def detalle_articulo(request, pk):
         else:
             comentario_form = ComentarioForm()
     
-    # 2. Listado de Comentarios y Permisos
     comentarios = articulo.comentarios.all().order_by('fecha')
     
     comentarios_data = []
@@ -74,11 +89,9 @@ def detalle_articulo(request, pk):
     for comentario in comentarios:
         can_edit_or_delete = False
         
-        # El usuario logueado puede editar/eliminar un comentario si:
         if user.is_authenticated:
             es_dueno = (comentario.usuario == user)
             
-            # Es dueño O (Es Colaborador o Superuser)
             if es_dueno or is_colab_or_super:
                 can_edit_or_delete = True
         
