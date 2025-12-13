@@ -15,11 +15,9 @@ class ArticuloForm(forms.ModelForm):
         model = Articulo
 
         
-        # Excluimos 'editor', 'fecha_publicacion' y 'publicado' 
-        # porque los asignaremos automáticamente en la vista.
+       
         fields = ('titulo', 'resumen', 'contenido', 'categoria', 'imagen')
         
-        # Opcional: añade clases para darle un estilo (asumiendo Bootstrap)
         widgets = {
             'titulo': forms.TextInput(attrs={'class': 'form-control'}),
             'resumen': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),

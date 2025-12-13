@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
-from .models import Articulo
+from .models import Articulo, Categoria
 from .forms import ArticuloForm
 from django.contrib.auth.models import Group 
 from apps.comentario.forms import ComentarioForm 
@@ -17,98 +17,98 @@ def es_colaborador(user):
     except Group.DoesNotExist:
         return False
 
-# Lista de articulos activos 
 
 def lista_articulos(request):
-    articulos_qs = Articulo.objects.filter(activo=True)
-    articulos_data = []
-    user = request.user
     
-    # Pre-calcular el permiso de Colaborador (solo una vez)
-    is_colab = es_colaborador(user)
-    is_super = user.is_superuser
-    
-    for articulo in articulos_qs:
-        # Lógica de Permisos: ¿Puede el usuario actual editar/eliminar este artículo?
-        # Requisito: Es dueño O es colaborador O es superusuario
-        can_edit = False
-        if user.is_authenticated:
-            es_dueno = (articulo.editor == user)
+    articulos = Articulo.objects.filter(activo=True)
+  
+    filtro_categoria = request.GET.get('categoria', None) 
+    orden_por = request.GET.get('orden', 'fecha_desc') 
+    if filtro_categoria:
+        try:
+            articulos = articulos.filter(categoria__pk=int(filtro_categoria))
+        except ValueError:
+            pass 
             
-            if es_dueno or is_colab or is_super:
-                can_edit = True
-        
-        # Crear un diccionario que combina el objeto Articulo con el permiso calculado
+    if orden_por == 'fecha_asc':
+        articulos = articulos.order_by('fecha_publicacion')
+    elif orden_por == 'fecha_desc':
+        articulos = articulos.order_by('-fecha_publicacion') 
+    elif orden_por == 'titulo_asc':
+        articulos = articulos.order_by('titulo') 
+    elif orden_por == 'titulo_desc':
+        articulos = articulos.order_by('-titulo') 
+    
+    todas_las_categorias = Categoria.objects.all()
+    
+    articulos_data = []
+    for articulo in articulos:
+        can_edit = False
+        if request.user.is_authenticated:
+            is_owner = (articulo.editor == request.user)
+            is_superuser_or_colab = request.user.is_superuser 
+            can_edit = is_owner or is_superuser_or_colab
+
         articulos_data.append({
             'articulo': articulo,
-            'can_edit': can_edit
+            'can_edit': can_edit,
         })
         
-    contexto = {'articulos_data': articulos_data} # Cambiamos el nombre de la variable de contexto
+    contexto = {
+        'articulos_data': articulos_data,
+        'categorias': todas_las_categorias,
+        'filtro_categoria_actual': filtro_categoria, 
+        'orden_actual': orden_por,
+    }
+    
     return render(request, 'articulo/lista_articulos.html', contexto)
-
-#  Muestra un artículo específico.
 
 def detalle_articulo(request, pk):
     articulo = get_object_or_404(Articulo, pk=pk, activo=True)
     user = request.user
     
-    # Lógica de permisos para la edición del ARTÍCULO (que ya teníamos)
-    can_edit_articulo = False
+    comentario_form = None
     if user.is_authenticated:
-        es_dueno = (articulo.editor == user)
-        es_colab = es_colaborador(user)
-        if es_dueno or es_colab or user.is_superuser:
-            can_edit_articulo = True
-
-    # 1. Manejo de la CREACIÓN de Comentarios (Si el usuario está logueado y envió un POST)
-    if request.method == 'POST' and user.is_authenticated:
-        comentario_form = ComentarioForm(request.POST)
-        if comentario_form.is_valid():
-            nuevo_comentario = comentario_form.save(commit=False)
-            nuevo_comentario.articulo = articulo
-            nuevo_comentario.usuario = user
-            nuevo_comentario.save()
-            messages.success(request, "Tu comentario ha sido publicado.")
-            # Redirigir a la misma página para evitar reenvío del formulario (patrón PRG)
-            return redirect('apps.articulo:detalle_articulo', pk=articulo.pk)
-    else:
-        # El formulario se crea vacío para mostrarlo si el usuario está logueado
-        comentario_form = ComentarioForm()
-        
+        if request.method == 'POST':
+            comentario_form = ComentarioForm(request.POST)
+            if comentario_form.is_valid():
+                nuevo_comentario = comentario_form.save(commit=False)
+                nuevo_comentario.articulo = articulo
+                nuevo_comentario.usuario = user
+                nuevo_comentario.save()
+                messages.success(request, "Tu comentario ha sido publicado.")
+                return redirect('apps.articulo:detalle_articulo', pk=articulo.pk)
+        else:
+            comentario_form = ComentarioForm()
     
-    # 2. LISTADO DE COMENTARIOS (READ)
-    # Se obtienen todos los comentarios activos del artículo
-    comentarios = articulo.comentarios.all().order_by('-fecha')
+    comentarios = articulo.comentarios.all().order_by('fecha')
     
-    # Preparamos los datos para el template, incluyendo el permiso de edición/eliminación
     comentarios_data = []
-    is_colab = es_colaborador(user)
-    is_super = user.is_superuser
+    is_colab_or_super = es_colaborador(user) or user.is_superuser
     
     for comentario in comentarios:
-        can_edit_comentario = False
+        can_edit_or_delete = False
         
-        # El usuario logueado puede editar/eliminar un comentario si:
         if user.is_authenticated:
             es_dueno = (comentario.usuario == user)
             
-            # Es dueño O (Es Colaborador O Superuser)
-            if es_dueno or is_colab or is_super:
-                can_edit_comentario = True
+            if es_dueno or is_colab_or_super:
+                can_edit_or_delete = True
         
         comentarios_data.append({
             'comentario': comentario,
-            'can_edit': can_edit_comentario
+            'can_manage': can_edit_or_delete 
         })
 
     contexto = {
         'articulo': articulo,
         'comentario_form': comentario_form,
         'comentarios_data': comentarios_data,
-        'can_edit_articulo': can_edit_articulo,
     }
     return render(request, 'articulo/detalle_articulo.html', contexto)
+
+
+
 # ----------------------------------------------------
  # CREAR
 # ----------------------------------------------------

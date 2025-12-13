@@ -5,5 +5,6 @@ from . import views
 app_name = 'apps.comentario'
 
 urlpatterns = [
-  #  path('comentario', views.lista_articulos, name='lista_articulos'),
+    path('comentario/<int:pk_comentario>/editar/', views.editarComentario, name='editarComentario'),
+    path('comentario/<int:pk_comentario>/eliminar/', views.eliminarComentario, name='eliminarComentario'),
 ]

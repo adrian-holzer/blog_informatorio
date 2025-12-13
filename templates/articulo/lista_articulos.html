@@ -6,7 +6,62 @@
 <div class="container">
     <h1 class="my-4">Artículos del Blog</h1>
 
-    {# Botón CREAR (Visible solo para usuarios logueados) #}
+    
+    <div class="card p-3 mb-4 shadow-sm">
+        
+        <form method="get" action="{% url 'apps.articulo:lista_articulos' %}" class="row g-3 align-items-end">
+
+   {# FILTRO POR CATEGORÍA #}
+<div class="col-md-4">
+    <label for="id_categoria" class="form-label small fw-bold">Filtrar por Categoría:</label>
+    <select name="categoria" id="id_categoria" class="form-select form-select-sm">
+        <option value="">Todas las categorías</option> 
+        {% for cat in categorias %}
+        <option value="{{ cat.pk }}" 
+            {% if cat.pk|add:'' == filtro_categoria_actual.pk %}selected{% endif %}>
+            {{ cat.nombre }}            
+        </option>
+        {% endfor %}
+    </select>
+</div>
+            {# ORDENAR POR (Antigüedad / Alfabético) #}
+            <div class="col-md-4">
+                <label for="id_orden" class="form-label small fw-bold">Ordenar por:</label>
+                <select name="orden" id="id_orden" class="form-select form-select-sm">
+                    
+                    {# La sintaxis perfecta para mantener la selección #}
+                    <option value="fecha_desc" {% if orden_actual == 'fecha_desc' %}selected{% endif %}>
+                        Antigüedad (Más Nuevo)
+                    </option>
+                    
+                    <option value="fecha_asc" {% if orden_actual == 'fecha_asc' %}selected{% endif %}>
+                        Antigüedad (Más Antiguo)
+                    </option>
+                    
+                    <option value="titulo_asc" {% if orden_actual == 'titulo_asc' %}selected{% endif %}>
+                        Título (A - Z)
+                    </option>
+                    
+                    <option value="titulo_desc" {% if orden_actual == 'titulo_desc' %}selected{% endif %}>
+                        Título (Z - A)
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-4 d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-sm me-2">
+                    <i class="bi bi-funnel"></i> Aplicar Filtros
+                </button>
+                <a href="{% url 'apps.articulo:lista_articulos' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-x-circle"></i> Limpiar Filtros
+                </a>
+            </div>
+            
+        </form>
+    </div>
+    {# ------------------------------------------------------------------ #}
+
+
     {% if user.is_authenticated %}
     <div class="d-flex justify-content-end mb-4">
         <a href="{% url 'apps.articulo:crear_articulo' %}" class="btn btn-success">
@@ -25,7 +80,6 @@
 
                     <div class="row g-0">
 
-                        {# COLUMNA 1: IMAGEN #}
                         {% if articulo.imagen %}
                         <div class="col-md-3 d-flex align-items-center justify-content-center">
                             <img src="{{ articulo.imagen.url }}" alt="{{ articulo.titulo }}"
@@ -35,7 +89,6 @@
                         {% endif %}
 
                         {# COLUMNA 2: TEXTO Y METADATOS #}
-                        {# Ajustamos el ancho si hay imagen (col-md-9) o si no la hay (col-md-12) #}
                         <div class="{% if articulo.imagen %}col-md-9{% else %}col-md-12{% endif %}">
 
                             <h3 class="card-title mb-2">

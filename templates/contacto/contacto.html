@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4 text-center">Contáctanos</h1>
+
+           
+            
+            <div class="card shadow-sm p-4">
+                <form method="post">
+                    {% csrf_token %}
+
+                    {{ form|crispy }}
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Enviar Mensaje</button>
+                    </div>
+                </form>
+            </div>
+
+            <hr class="my-5">
+
+            <h3 class="text-center mb-3">Otras Formas de Contacto</h3>
+            <ul class="list-unstyled text-center">
+                <li><i class="bi bi-envelope-fill me-2"></i> Email: contacto@miblog.com</li>
+                <li><i class="bi bi-twitter me-2"></i> Twitter: @MiBlogOficial</li>
+                <li><i class="bi bi-linkedin me-2"></i> LinkedIn: /mi-pagina-blog</li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+
+                {# Icono de éxito grande en color verde #}
+                <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+
+                <h3 class="mt-3 mb-2 text-success">¡Mensaje Enviado Correctamente!</h3>
+                <p>Gracias por tu mensaje. Nos pondremos en contacto contigo pronto.</p>
+
+                <button type="button" class="btn btn-success mt-3" data-bs-dismiss="modal">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isSent = urlParams.get('enviado');
+
+        if (isSent === 'true') {
+            const successModalElement = document.getElementById('successModal');
+            
+            if (successModalElement) {
+                const successModal = new bootstrap.Modal(successModalElement);
+                
+                successModal.show();
+                
+                history.replaceState(null, '', window.location.pathname);
+            } else {
+                 console.error("Error: Elemento 'successModal' no encontrado.");
+            }
+        }
+    });
+</script>
+{% endblock extra_js %}
