@@ -1,7 +1,7 @@
 /*
  * 1. REGLAS DE CONFIGURACIÓN (PRUEBAS COMENTADAS)
  * Este bloque contiene las pruebas de color anteriores.
-*/
+ */
 /* body {
     background-color: #f0f8ff; 
     margin: 0;
@@ -12,7 +12,7 @@
 /*
  * 2. REGLAS DE ESTÉTICA (FUENTES)
  * Aplicación de la fuente Rajdhani a todo el sitio.
-*/
+ */
 body, h1, h2, h3, h4, h5, h6 {
     font-family: 'Rajdhani', sans-serif !important;
 }
@@ -21,7 +21,7 @@ body, h1, h2, h3, h4, h5, h6 {
 .card, .jumbotron {
     /* Aumentamos la opacidad y el desplazamiento para una sombra más visible */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), /* Sombra más grande y visible */
-                0 12px 30px rgba(0, 0, 0, 0.15); /* Sombra más profunda */
+                 0 12px 30px rgba(0, 0, 0, 0.15); /* Sombra más profunda */
     transition: transform 0.3s ease;
 }
 
@@ -29,6 +29,43 @@ body, h1, h2, h3, h4, h5, h6 {
 .card:hover {
     transform: translateY(-5px); /* Ahora salta 5px (antes 3px) */
 }
+
+/* ========================================================================= */
+/* AJUSTES DE CONTRASTE (NUEVO BLOQUE PARA RESOLVER EL PUNTO 1) */
+/* ========================================================================= */
+
+/* 1. Barra de Navegación: Aumentar contraste sobre fondo oscuro (bg-dark) */
+
+/* a) Título 'Informatorio' y Enlaces Centrales (Inicio, Acerca, Artículos) */
+.navbar-brand.text-success,
+.navbar-nav .nav-link {
+    color: #ffffff !important; /* Blanco para alto contraste en fondo negro */
+}
+
+/* Efecto hover para enlaces del navbar */
+.navbar-nav .nav-link:hover {
+    color: #cccccc !important; /* Gris claro al pasar el mouse */
+}
+
+/* b) Botón "Iniciar Sesión" (usa Bootstrap .btn-outline-success) */
+.btn-outline-success {
+    color: #ffffff;      /* Texto blanco */
+    border-color: #ffffff; /* Borde blanco para contraste */
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    background-color: #ffffff; /* Fondo blanco al pasar el mouse */
+    color: #000000;          /* Texto negro al pasar el mouse */
+    border-color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 
 /* ========================================================================= */
 /* 4. DISEÑO DE BOTONES (Paso 55) */
@@ -55,15 +92,15 @@ body, h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* 4.2 Botón Secundario (Outline Light) */
+/* 4.2 Botón Secundario (Outline Light) - Mantenido para otros usos */
 .btn-outline-light {
-    /* Estilos generales para que se vea bien en la barra CLARA */
+    /* Estilos generales */
     font-family: 'Rajdhani', sans-serif;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: all 0.3s ease;
-    /* Corrección de color de texto para el fondo CLARO */
+    /* Corrección de color de texto para el fondo CLARO (Si se usa en otra parte) */
     color: #3b5998;
     border-color: #3b5998;
 }

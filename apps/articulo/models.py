@@ -9,21 +9,39 @@ class Categoria(models.Model):
         return self.nombre
 
 class Articulo(models.Model):
-    titulo = models.CharField(max_length=30, null=False)
-    resumen = models.TextField(null=False)
-    contenido = models.TextField(null=False)
+    titulo = models.CharField(max_length=30)
+    resumen = models.TextField()
+    contenido = models.TextField()
     fecha_publicacion = models.DateTimeField(auto_now_add=True)
     activo = models.BooleanField(default=True)
-    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
-    imagen = models.ImageField(null=True, blank=True, upload_to='media', default='post_default.png')
+
+    categoria = models.ForeignKey(
+        Categoria,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    imagen = models.ImageField(
+        upload_to='articulos/',
+        default='articulos/imagen_predeterminada.png',
+        blank=True
+    )
+
     publicado = models.DateTimeField(default=timezone.now)
-    editor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    editor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True
+    )
 
     class Meta:
         ordering = ('-publicado',)
 
     def __str__(self):
         return self.titulo
+
+
 
 
 class Image(models.Model):

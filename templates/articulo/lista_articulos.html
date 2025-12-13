@@ -62,13 +62,26 @@
     {# ------------------------------------------------------------------ #}
 
 
-    {% if user.is_authenticated %}
-    <div class="d-flex justify-content-end mb-4">
-        <a href="{% url 'apps.articulo:crear_articulo' %}" class="btn btn-success">
-            + Crear Nuevo Artículo
-        </a>
-    </div>
+{% if user.is_authenticated %}
+    {% if user.is_superuser %}
+        <div class="d-flex justify-content-end mb-4">
+            <a href="{% url 'apps.articulo:crear_articulo' %}" class="btn btn-success">
+                + Crear Nuevo Artículo
+            </a>
+        </div>
+    {% else %}
+        {% for grupo in user.groups.all %}
+            {% if grupo.name == 'Colaborador' %}
+                <div class="d-flex justify-content-end mb-4">
+                    <a href="{% url 'apps.articulo:crear_articulo' %}" class="btn btn-success">
+                        + Crear Nuevo Artículo
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
     {% endif %}
+{% endif %}
+
 
     <div class="row">
         {% for data in articulos_data %}

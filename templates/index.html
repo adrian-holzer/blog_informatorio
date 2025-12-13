@@ -1,85 +1,121 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
-{% block title %}Página Principal - Blog{% endblock %}
+{% block title %}Inicio - Informatorio{% endblock %}
 
 {% block content %}
-<header class="p-5 mb-4 bg-light rounded-3 text-center">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Bienvenido a Nuestro Blog</h1>
-        <p class="col-md-8 fs-4 mx-auto">
-            Explora artículos interesantes, aprende cosas nuevas y únete a la conversación.
-            Regístrate para comentar y colaborar.
-        </p>
-        
-        {# Lógica condicional para mostrar el botón solo si el usuario NO está autenticado #}
-        {% if not user.is_authenticated %}
-            <a href="{% url 'apps.usuario:login' %}" class="btn btn-primary btn-lg mt-3">
-                Iniciar Sesión
-            </a>
-            <a href="{% url 'apps.usuario:registrar' %}" class="btn btn-outline-secondary btn-lg mt-3 ms-2">
-                Crear Cuenta
-            </a>
-        {% else %}
-            <p class="mt-4 fs-5 text-success">
-                ¡Estás conectado! Explora nuestros artículos.
+
+<!-- HERO -->
+<section class="mb-5">
+    <div class="p-5 text-center bg-light rounded-4 shadow-sm">
+        <div class="container py-4">
+            <h1 class="display-5 fw-bold mb-3">
+                Bienvenido a Nuestro Blog
+            </h1>
+
+            <p class="fs-5 text-muted col-lg-8 mx-auto">
+                Explora artículos interesantes, aprende cosas nuevas y sé parte de la comunidad Informatorio.
             </p>
-        {% endif %}
-    </div>
-</header>
 
-<div class="row">
-    {# Columna Principal para Artículos #}
-    <div class="col-lg-8">
-        <h2>Últimos Artículos</h2>
-        <hr>
-        
-        {# Aquí deberías iterar sobre una lista de artículos (ej: object_list) si usas una ListView #}
-        {# Ejemplo de un artículo estático #}
-        <div class="card mb-4">
-            <div class="card-body">
-                <h3 class="card-title">Título del Artículo de Ejemplo</h3>
-                <p class="card-text">
-                    Este es el contenido resumido de un post de blog. Aquí el visitante puede leer 
-                    una introducción y decidir si quiere entrar al artículo completo.
-                </p>
-                <a href="#" class="btn btn-sm btn-outline-primary">Leer más →</a>
-                <div class="text-muted fst-italic mt-2">Publicado por [Autor] el [Fecha]</div>
-            </div>
-        </div>
-        
-        {# Puedes añadir más divs de 'card' aquí para simular la lista #}
-        
-    </div>
-
-    {# Barra Lateral (Sidebar) #}
-    <div class="col-lg-4">
-        <div class="card mb-4">
-            <div class="card-header">Categorías</div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <ul class="list-unstyled mb-0">
-                            <li><a href="#">Tecnología</a></li>
-                            <li><a href="#">Diseño</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-6">
-                        <ul class="list-unstyled mb-0">
-                            <li><a href="#">Tutoriales</a></li>
-                            <li><a href="#">Noticias</a></li>
-                        </ul>
-                    </div>
+            {% if user.is_authenticated %}
+                <span class="badge bg-success fs-6 mt-3">
+                    Estás conectado
+                </span>
+            {% else %}
+                <div class="mt-4">
+                    <a href="{% url 'apps.usuario:login' %}" class="btn btn-primary btn-lg me-2">
+                        Iniciar Sesión
+                    </a>
+                    <a href="{% url 'apps.usuario:registrar' %}" class="btn btn-outline-secondary btn-lg">
+                        Crear Cuenta
+                    </a>
                 </div>
-            </div>
+            {% endif %}
         </div>
+    </div>
+</section>
 
-        {# Aquí puedes añadir más widgets de la barra lateral, como "Acerca de" o "Archivos" #}
-        <div class="card mb-4">
-            <div class="card-header">Sobre Nosotros</div>
+<!-- CONTENIDO -->
+<div class="row g-4 mb-5">
+
+    <!-- ÚLTIMO ARTÍCULO -->
+    <div class="col-md-8">
+        <h3 class="mb-3">Último Artículo</h3>
+
+        <div class="card shadow-sm">
             <div class="card-body">
-                Somos una comunidad dedicada a compartir conocimiento sobre Django y desarrollo web.
+
+                {% if ultimo_articulo %}
+                <div class="d-flex align-items-start">
+
+                    <!-- IMAGEN -->
+                    <div class="me-3">
+                        <img
+                            src="{{ ultimo_articulo.imagen.url }}"
+                            alt="{{ ultimo_articulo.titulo }}"
+                            class="rounded"
+                            style="width: 100px; height: 100px; object-fit: cover;"
+                        >
+                    </div>
+
+                    <!-- TEXTO -->
+                    <div class="flex-grow-1">
+                        <span class="badge bg-success mb-2">
+                            {{ ultimo_articulo.categoria|default:"Sin categoría" }}
+                        </span>
+
+                        <h5 class="fw-bold mb-1">
+                            {{ ultimo_articulo.titulo }}
+                        </h5>
+
+                        <p class="text-muted small mb-2">
+                            Por <strong>{{ ultimo_articulo.editor.username }}</strong> ·
+                            {{ ultimo_articulo.fecha_publicacion|date:"d M Y" }}
+                        </p>
+
+                        <p class="mb-2">
+                            {{ ultimo_articulo.resumen|truncatewords:18 }}
+                        </p>
+
+                        <a href="{% url 'apps.articulo:detalle_articulo' ultimo_articulo.pk %}"
+                           class="btn btn-outline-success btn-sm">
+                            Leer artículo completo →
+                        </a>
+                    </div>
+
+                </div>
+                {% else %}
+                <p class="text-muted mb-0">Todavía no hay artículos publicados.</p>
+                {% endif %}
+
             </div>
         </div>
     </div>
+
+    <!-- CATEGORÍAS -->
+    <div class="col-md-4">
+        <h3 class="mb-3">Categorías</h3>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                {% if categorias %}
+                <div class="d-flex flex-wrap gap-2">
+                    {% for categoria in categorias %}
+                    <a href="{% url 'apps.articulo:lista_articulos' %}?categoria={{ categoria.pk }}"
+                       class="btn btn-outline-secondary btn-sm rounded-pill">
+                        {{ categoria.nombre }}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted mb-0">No hay categorías.</p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
 {% endblock %}
