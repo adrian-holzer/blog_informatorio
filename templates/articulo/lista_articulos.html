@@ -7,11 +7,9 @@
     <h1 class="my-4">Artículos del Blog</h1>
 
     
-    <div class="card p-3 mb-4 shadow-sm">
-        
-        <form method="get" action="{% url 'apps.articulo:lista_articulos' %}" class="row g-3 align-items-end">
+    <div class="card p-3 mb-4 shadow-sm bg-transparent text-warning border-0 card-sin-hover"> <form method="get" action="{% url 'apps.articulo:lista_articulos' %}" class="row g-3 align-items-end">
 
-   {# FILTRO POR CATEGORÍA #}
+    {# FILTRO POR CATEGORÍA #}
 <div class="col-md-4">
     <label for="id_categoria" class="form-label small fw-bold">Filtrar por Categoría:</label>
     <select name="categoria" id="id_categoria" class="form-select form-select-sm">
@@ -19,7 +17,7 @@
         {% for cat in categorias %}
         <option value="{{ cat.pk }}" 
             {% if cat.pk|add:'' == filtro_categoria_actual.pk %}selected{% endif %}>
-            {{ cat.nombre }}            
+            {{ cat.nombre }}              
         </option>
         {% endfor %}
     </select>
@@ -127,8 +125,7 @@
                                 {# Botones de ACCIÓN (Editar/Eliminar) #}
                                 {% if user.is_authenticated and can_edit %}
                                 <a href="{% url 'apps.articulo:editar_articulo' pk=articulo.pk %}"
-                                    class="btn btn-sm btn-outline-primary me-2">
-                                    Editar
+                                    class="btn btn-sm btn-outline-success me-2"> Editar
                                 </a>
                                 <a href="{% url 'apps.articulo:eliminar_articulo' pk=articulo.pk %}"
                                     class="btn btn-sm btn-outline-danger me-3">
@@ -137,8 +134,7 @@
                                 {% endif %}
 
                                 <a href="{% url 'apps.articulo:detalle_articulo' pk=articulo.pk %}"
-                                    class="btn btn-sm btn-info">
-                                    Leer más
+                                    class="btn btn-sm btn-success"> Leer más
                                 </a>
                             </div>
 

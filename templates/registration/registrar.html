@@ -1,37 +1,21 @@
 {% extends 'base.html' %} 
+{% load static %}
+{% load crispy_forms_tags %} {# 1. NUEVA LÍNEA: Cargamos el filtro de Crispy Forms #}
 
 {% block title %}Registro de Usuario{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        {# 2. CAMBIO: col-md-6 se reemplaza por col-md-5 login-form-container #}
+        <div class="col-md-5 login-form-container"> 
             <h2 class="mt-4 mb-3">Registrarse</h2>
+            
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 
-                {# Mostrar los errores generales del formulario #}
-                {% if form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        {% for error in form.non_field_errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-                {# Renderizar los campos del formulario (incluye 'imagen', si está en fields) #}
-                {% for field in form %}
-                <div class="form-group mb-3">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.help_text %}
-                        <small class="form-text text-muted">{{ field.help_text }}</small>
-                    {% endif %}
-                    {% for error in field.errors %}
-                        <div class="alert alert-danger mt-1">{{ error }}</div>
-                    {% endfor %}
-                </div>
-                {% endfor %}
+                {# 3. REEMPLAZO TOTAL: Usamos {{ form|crispy }} en lugar de todo el bucle for #}
+                {{ form|crispy }}
 
                 <button type="submit" class="btn btn-primary btn-block">Crear Cuenta</button>
             </form>

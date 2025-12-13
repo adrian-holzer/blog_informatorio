@@ -4,17 +4,6 @@
 
 {% block content %}
 
-{% if not user.is_authenticated %}
-<div class="d-flex justify-content-end mb-4 me-3"> 
-    <a href="{% url 'apps.usuario:login' %}" class="btn btn-primary btn-sm me-2">
-        Iniciar Sesión
-    </a>
-    <a href="{% url 'apps.usuario:registrar' %}" class="btn btn-outline-secondary btn-sm">
-        Crear Cuenta
-    </a>
-</div>
-{% endif %}
-
 <section class="mb-5">
     <div class="p-5 text-center bg-light rounded-4 shadow-sm">
         <div class="container py-4">
@@ -22,7 +11,7 @@
                 Bienvenido a Nuestro Blog
             </h1>
 
-            <p class="fs-5 text-muted col-lg-8 mx-auto">
+            <p class="fs-5 text-muted">
                 Explora artículos interesantes, aprende cosas nuevas y sé parte de la comunidad Informatorio.
             </p>
             
@@ -35,17 +24,17 @@
     </div>
 </section>
 
-<div class="row g-4 mb-5">
+<div class="container"> 
+    <div class="row g-4 mb-5">
+        
+        <div class="col-md-8">
+            <h3 class="mb-3">Último Artículo</h3>
+            </div>
 
-    <div class="col-md-8">
-        <h3 class="mb-3">Último Artículo</h3>
-        </div>
+        <div class="col-md-4">
+            <h3 class="mb-3">Categorías</h3>
+            </div>
 
-    <div class="col-md-4">
-        <h3 class="mb-3">Categorías</h3>
-        </div>
-
+    </div>
 </div>
-
-
 {% endblock %}

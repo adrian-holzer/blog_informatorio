@@ -1,56 +1,109 @@
 /*
- * 1. REGLAS DE CONFIGURACIÓN (PRUEBAS COMENTADAS)
- * Este bloque contiene las pruebas de color anteriores.
+ * 1. REGLAS DE CONFIGURACIÓN Y FONDO ÚNICO DE CIBERSEGURIDAD
  */
-/* body {
-    background-color: #f0f8ff; 
+
+/* Establece el fondo principal de la web */
+body {
+    background-color: #121212; 
+    /* Color base del texto a Naranja Oscuro */
+    color: #e0a800; 
     margin: 0;
     padding: 0;
-} */
+
+    /* Aplica la imagen de fondo ÚNICA y la configura */
+    background-image: url('../img/fondo_body.png'); 
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+    background-position: center center; 
+    background-size: cover; 
+}
+
+/* OSCURECER LA IMAGEN DE FONDO PARA MEJOR LEGIBILIDAD (Overlay) */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: -1; 
+}
 
 
 /*
  * 2. REGLAS DE ESTÉTICA (FUENTES)
- * Aplicación de la fuente Rajdhani a todo el sitio.
  */
 body, h1, h2, h3, h4, h5, h6 {
-    font-family: 'Rajdhani', sans-serif !important;
+    font-family: 'Rajdhani', sans-serif !important; 
 }
 
-/* 3. EFECTO 3D (SOMBRAS) */
-.card, .jumbotron {
-    /* Aumentamos la opacidad y el desplazamiento para una sombra más visible */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), /* Sombra más grande y visible */
-                 0 12px 30px rgba(0, 0, 0, 0.15); /* Sombra más profunda */
+/* 3. EFECTO 3D (SOMBRAS) y AJUSTE DE TARJETAS */
+.card {
+    background-color: #1f1f1f; 
+    border: 2px solid #ffc400; 
+    color: #ffffff !important; 
+    /* AÑADIDO: Sombra de texto para alto contraste en TODO el contenido de la tarjeta */
+    text-shadow: 0 0 8px #000000, 0 0 15px #000000;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 
+                0 12px 30px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease;
 }
-
-/* Aumentamos el "salto" para que sea notorio */
 .card:hover {
-    transform: translateY(-5px); /* Ahora salta 5px (antes 3px) */
+    transform: translateY(-5px); 
 }
 
 /* ========================================================================= */
-/* AJUSTES DE CONTRASTE (NUEVO BLOQUE PARA RESOLVER EL PUNTO 1) */
+/* 4. AJUSTES DE CONTRASTE Y NAVBAR */
 /* ========================================================================= */
 
-/* 1. Barra de Navegación: Aumentar contraste sobre fondo oscuro (bg-dark) */
+/* 4.1. Bloque de Bienvenida (Jumbotron) - Transparencia y Borde */
+.bg-light {
+    background-color: transparent !important; 
+    box-shadow: 0 0 10px rgba(255, 196, 0, 0.3) !important; 
+    border: 1px solid rgba(255, 196, 0, 0.2); 
+}
 
-/* a) Título 'Informatorio' y Enlaces Centrales (Inicio, Acerca, Artículos) */
+/* Estilo para el Título (h1) y texto del Hero (p) */
+.bg-light h1 { 
+    color: #ffc400 !important; 
+    font-weight: 700;
+    /* Sombra Negra Densa y Concentrada (Simple) */
+    text-shadow: 0 0 8px #000000, 0 0 15px #000000; 
+}
+
+/* FIX: Estilo para el texto del Hero (p) - SOLUCIÓN PARA UNA SOLA LÍNEA */
+.bg-light .text-muted { 
+    color: #ffc400 !important; 
+    font-weight: 700;
+    /* Sombra Negra Densa y Concentrada (Simple) */
+    text-shadow: 0 0 8px #000000, 0 0 15px #000000;
+    
+    /* === FIX: FORZAR UNA SOLA LÍNEA === */
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* =========================================== */
+}
+
+
+/* 4.2 Barra de Navegación */
+
+/* a) Título 'Informatorio' y Enlaces Centrales */
 .navbar-brand.text-success,
 .navbar-nav .nav-link {
-    color: #ffffff !important; /* Blanco para alto contraste en fondo negro */
+    color: #ffc400 !important; 
 }
 
-/* Efecto hover para enlaces del navbar */
+/* Efecto hover: Blanco al pasar el mouse para alto contraste */
 .navbar-nav .nav-link:hover {
-    color: #cccccc !important; /* Gris claro al pasar el mouse */
+    color: #ffffff !important; 
 }
 
-/* b) Botón "Iniciar Sesión" (usa Bootstrap .btn-outline-success) */
-.btn-outline-success {
-    color: #ffffff;      /* Texto blanco */
-    border-color: #ffffff; /* Borde blanco para contraste */
+/* b) Botón de Contorno */
+.btn-outline-success { 
+    color: #ffc400;
+    border-color: #ffc400;
     font-family: 'Rajdhani', sans-serif;
     font-weight: 600;
     text-transform: uppercase;
@@ -59,23 +112,104 @@ body, h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-outline-success:hover {
-    background-color: #ffffff; /* Fondo blanco al pasar el mouse */
-    color: #000000;          /* Texto negro al pasar el mouse */
-    border-color: #ffffff;
+    background-color: #ffc400; 
+    color: #121212;
+    border-color: #ffc400;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* FIX: Estilo de ENFOQUE para botón de contorno (Añadido) */
+.btn-outline-success:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 196, 0, 0.5) !important; 
+    border-color: #ffc400 !important;
+}
+
+
+/* c) Botón de Relleno */
+.btn-success {
+    background-color: #ffc400 !important;
+    border-color: #ffc400 !important;
+    color: #121212 !important; 
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.btn-success:hover,
+.btn-success:active { /* ESTILO ACTIVO CONSERVADO */
+    background-color: #e0ac00 !important; 
+    border-color: #e0ac00 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* FIX: Estilo de ENFOQUE para botón de relleno (Reforzado para anular el verde) */
+.btn-success:focus,
+button[type="submit"].btn-success:focus { 
+    box-shadow: 0 0 0 0.25rem rgba(255, 196, 0, 0.5) !important; 
+    border-color: #ffc400 !important;
+}
+
 
 /* ========================================================================= */
-/* 4. DISEÑO DE BOTONES (Paso 55) */
+/* 5. DISEÑO DE ELEMENTOS DE CONTENIDO */
 /* ========================================================================= */
 
-/* 4.1 Botón Primario */
+/* 5.1 Estilo para títulos de sección (h3) */
+h3 {
+    color: #ffc400; 
+    text-transform: uppercase;
+    border-bottom: 2px solid #ffc400; 
+    padding-bottom: 5px;
+    margin-bottom: 20px !important;
+}
+
+/* 5.2 Estilo para Badges */
+.badge.bg-success {
+    background-color: #ffc400 !important; 
+    color: #121212 !important; 
+    font-weight: 700;
+}
+
+/* 5.3 Estilo para enlaces de Categorías */
+.card .btn-outline-secondary {
+    color: #ffc400; 
+    border-color: #ffc400; 
+    font-weight: 500;
+}
+.card .btn-outline-secondary:hover {
+    background-color: #ffc400;
+    color: #121212;
+}
+
+/* 5.4 Estilo para elementos de Formulario (REVERTIDO A VERSIÓN SIMPLE) */
+input.form-control, 
+select.form-control, 
+textarea.form-control {
+    background-color: #1f1f1f !important; /* Gris Oscuro FORZADO (Punto 4) */
+    color: #ffffff !important; /* Letras blancas FORZADAS (Punto 5) */
+    border: 1px solid #ffc400 !important;
+}
+
+input.form-control:focus, 
+select.form-control:focus, 
+textarea.form-control:focus {
+    background-color: #1f1f1f !important;
+    color: #ffffff !important;
+    border-color: #ffc400 !important; 
+    box-shadow: 0 0 5px rgba(255, 196, 0, 0.5) !important; 
+}
+
+
+/* 5.5 Botón Primario (Corregido a estilo ÁMBAR/Negro) */
 .btn-primary {
-    /* Estilos generales */
-    background-color: #3b5998; /* Azul sólido */
-    border-color: #3b5998;
+    /* **COMIENZO DEL REEMPLAZO** */
+    background-color: #ffc400 !important; 
+    border-color: #ffc400 !important;
+    color: #121212 !important; /* Texto negro */
     font-family: 'Rajdhani', sans-serif;
     font-weight: 600;
     text-transform: uppercase;
@@ -85,32 +219,272 @@ body, h1, h2, h3, h4, h5, h6 {
 
 .btn-primary:hover,
 .btn-primary:focus {
-    /* Efecto al interactuar */
-    background-color: #2d4373; /* Azul más oscuro */
-    border-color: #2d4373;
+    background-color: #e0ac00 !important; 
+    border-color: #e0ac00 !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* **FIN DEL REEMPLAZO** */
 }
 
-/* 4.2 Botón Secundario (Outline Light) - Mantenido para otros usos */
+/* 5.6 Botón Secundario (Outline Light) */
 .btn-outline-light {
-    /* Estilos generales */
     font-family: 'Rajdhani', sans-serif;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: all 0.3s ease;
-    /* Corrección de color de texto para el fondo CLARO (Si se usa en otra parte) */
     color: #3b5998;
     border-color: #3b5998;
 }
 
 .btn-outline-light:hover,
 .btn-outline-light:focus {
-    /* Estilos al pasar el ratón o enfocar */
-    color: white; /* El texto se vuelve blanco */
-    background-color: #3b5998; /* El fondo se llena del color primario */
+    color: white; 
+    background-color: #3b5998; 
     border-color: #3b5998;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 6. FIX DE LAYOUT */
+.row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+/* ========================================================================= */
+/* 7. ESTILOS ESPECÍFICOS DEL PIE DE PÁGINA (FOOTER) - Paso 75 */
+/* ========================================================================= */
+
+footer {
+    /* Forzamos el color base del texto a Naranja Oscuro */
+    color: #e0a800 !important; 
+}
+
+/* Regla para forzar que los títulos del footer sean de color de acento (Brillante) */
+footer h1,
+footer h2,
+footer h3,
+footer h4,
+footer h5,
+footer h6 {
+    color: #ffc400 !important; 
+}
+
+/* Forzamos el color Naranja Oscuro al texto base dentro del footer */
+footer p,
+footer li,
+footer span {
+    color: #e0a800 !important;
+}
+
+/* <<< CAMBIO CLAVE (Paso 75): Forzamos el color de copyright/última línea */
+.text-center.py-4 {
+    color: #e0a800 !important; 
+}
+
+
+/* Solución definitiva para enlaces del footer */
+footer a,
+footer a:link,
+footer a:visited {
+    color: #ffc400 !important; /* Color de acento para todos los estados base */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #ffffff !important; /* Blanco para el efecto hover */
+}
+
+
+/* Asegura que todos los elementos internos hereden ese color si no tienen una regla más específica */
+footer * {
+    color: inherit; 
+}
+
+
+/* Estilo para clases de Bootstrap usadas en el footer que son de color */
+footer .text-success, 
+footer .text-muted,
+footer .text-secondary {
+    color: #ffc400 !important; 
+}
+/* ========================================================================= */
+/* 7. ESTILOS ESPECÍFICOS DEL PIE DE PÁGINA (FOOTER) - Ajuste de tamaño */
+/* ========================================================================= */
+
+footer {
+    /* Forzamos el color base del texto a Naranja Oscuro */
+    color: #e0a800 !important; 
+    padding: 10px 0 0 !important; /* Reducimos el relleno superior (10px) y quitamos el relleno inferior */
+}
+
+/* Reducir el relleno en las columnas principales del footer */
+footer .col-md-3,
+footer .col-lg-4,
+footer .col-12 {
+    padding-top: 5px !important;    /* Reducimos el espacio superior de cada columna */
+    padding-bottom: 5px !important; /* Reducimos el espacio inferior de cada columna */
+}
+
+/* Reducir el relleno en la sección de Copyright (text-center) */
+.text-center.py-4 {
+    padding-top: 5px !important;    /* Reducimos el padding superior */
+    padding-bottom: 5px !important; /* Reducimos el padding inferior */
+}
+
+
+/* 8. ESTILO ESPECÍFICO - CONTENEDORES DE COLUMNAS ACERCA DE */
+.columna-acerca {
+    background-color: rgba(0, 0, 0, 0.85); /* Negro con 85% de opacidad */
+    padding: 20px;
+    border-radius: 8px; /* Opcional: bordes redondeados */
+    border: 1px solid rgba(255, 196, 0, 0.2); /* Borde sutil del color de acento */
+}
+
+
+/* ========================================================================= */
+/* 9. FIX: ESTILOS AÑADIDOS PARA LA PÁGINA DE ARTÍCULOS */
+/* ========================================================================= */
+
+/* 9.1 FIX: Estilo para Contenedor de Filtros (Transparente y sin hover) */
+.card-sin-hover {
+    transition: none !important; 
+    transform: none !important;
+    /* Da la sombra y el borde que deseas */
+    box-shadow: 0 0 10px rgba(255, 196, 0, 0.3) !important; 
+    border: 1px solid rgba(255, 196, 0, 0.2); 
+}
+
+.card-sin-hover:hover {
+    /* Anula el efecto flotante al pasar el mouse */
+    transform: none !important; 
+    box-shadow: 0 0 10px rgba(255, 196, 0, 0.3) !important;
+}
+
+
+/* 9.2 ESTILO ALERTA: Hacemos las alertas transparentes y con estilo ámbar */
+.alert {
+    /* Esto soluciona el fondo celeste y lo hace transparente */
+    background-color: transparent !important; 
+    color: #ffc400 !important; /* Texto ámbar */
+    border: 1px solid rgba(255, 196, 0, 0.4) !important; /* Borde ámbar */
+    box-shadow: 0 0 10px rgba(255, 196, 0, 0.3); /* Sombra ámbar */
+}
+
+.alert i {
+    color: #ffc400 !important;
+}
+
+
+/* ========================================================================= */
+/* 11. FIX: Eliminar el espacio superior del Navbar */
+/* ========================================================================= */
+
+.navbar {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: none !important;
+}
+
+
+/* ========================================================================= */
+/* 12. ESTILOS ESPECÍFICOS: PÁGINA DE LOGIN/REGISTRO (REFORZADO) */
+/* ========================================================================= */
+
+/* Apuntamos al contenedor principal, asegurando los puntos 2 y 3 */
+.col-md-5.login-form-container {
+    /* (Punto 2) Fondo negro con 15% de opacidad */
+    background-color: rgba(0, 0, 0, 0.15) !important; /* Reforzado */
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 196, 0, 0.1); 
+}
+
+/* (Punto 3 y 1) Título */
+.col-md-5.login-form-container h2 {
+    /* (Punto 1) Aumenta el tamaño de la fuente */
+    font-size: 1.8rem !important; /* Reforzado */
+    /* (Punto 3) Sombra al texto */
+    text-shadow: 0 0 8px #000000, 0 0 15px #000000;
+    color: #ffc400 !important;
+}
+
+/* (Punto 1 y 3) Etiquetas (Labels) - MANTENEMOS ESTA REGLA DE ESTILO DEL BLOQUE 12 */
+.form-group label, /* Selector más general para asegurar que funcione */
+.col-md-5.login-form-container label {
+    /* (Punto 1) Aumenta el tamaño de la fuente */
+    font-size: 1.1rem !important; /* Reforzado */
+    color: #ffc400 !important; 
+    /* (Punto 3) Sombra al texto */
+    text-shadow: 0 0 5px #000000;
+}
+
+/* === AÑADIDO: Solución al punto 2 (Enlace de "Inicia Sesión") === */
+.col-md-5.login-form-container p a {
+    color: #ffc400 !important; /* Color de acento */
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.col-md-5.login-form-container p a:hover {
+    color: #ffffff !important; /* Blanco al pasar el mouse */
+}
+/* ========================================================================= */
+
+
+/* ========================================================================= */
+/* 13. FIX DE ESPACIADO PARA FORMULARIO DE REGISTRO */
+/* ========================================================================= */
+
+/* Este bloque ya no es tan necesario si se usa Crispy Forms, pero se mantiene */
+.login-form-container .form-group {
+    margin-bottom: 15px !important; 
+    padding: 0;
+}
+
+
+/* ========================================================================= */
+/* 14. FIX DE VISIBILIDAD DE TEXTO EN FORMULARIOS OSCUROS (CORRECCIÓN FINAL) */
+/* ========================================================================= */
+
+/* Soluciona los puntos 1, 2 y 3: Texto aclaratorio (form-text) en Naranja Brillante (#ffc400) */
+.login-form-container .form-text {
+    color: #ffc400 !important; 
+    font-weight: 600;
+    /* Aseguramos que la sombra negra para el contraste siga funcionando */
+    text-shadow: 0 0 5px #000000; 
+}
+
+
+/* ========================================================================= */
+/* 15. ESTILO PARA CAMPO DE SELECCIÓN DE ARCHIVO (Revertido a versión estable) */
+/* ========================================================================= */
+
+/* Soluciona el punto 4: Botón de archivo (input type="file") con relleno negro */
+.login-form-container input[type="file"] {
+    background-color: #1f1f1f !important; /* Fondo gris oscuro */
+    color: #ffffff !important; /* Letra blanca (texto "Ningún archivo seleccionado") */
+    border: 1px solid #ffc400 !important; /* Borde con tu color de acento */
+    padding: 5px; 
+}
+
+/* Regla para asegurar que el botón 'Seleccionar archivo' se vea oscuro */
+.login-form-container .form-control[type="file"] {
+    background-color: #1f1f1f !important;
+}
+
+
+/* ========================================================================= */
+/* 16. FIX FINAL DE COLOR PARA BOTÓN 'SELECCIONAR ARCHIVO' (Revertido a versión estable) */
+/* ========================================================================= */
+
+.login-form-container input[type="file"]::file-selector-button {
+    /* Forzamos el fondo del botón interno a gris oscuro */
+    background-color: #1f1f1f !important;
+    /* Mantenemos el color por defecto (suele ser negro o heredado) */
+    color: #ffffff !important; 
+    /* Borde ámbar para mantener la estética y separarlo del nombre del archivo */
+    border-right: 1px solid #ffc400 !important; 
 }

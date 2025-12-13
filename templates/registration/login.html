@@ -5,8 +5,7 @@
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-5">
-            <h2 class="mt-4 mb-3">Iniciar Sesión</h2>
+        <div class="col-md-5 login-form-container"> <h2 class="mt-4 mb-3">Iniciar Sesión</h2>
             
             <form method="post">
                 {% csrf_token %}
@@ -33,7 +32,7 @@
                 {% endif %}
             </form>
 
-           
+            
             <p>
                 ¿No tienes cuenta? <a href="{% url 'apps.usuario:registrar' %}">Regístrate aquí</a>
             </p>
