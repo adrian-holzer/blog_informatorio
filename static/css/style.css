@@ -29,3 +29,51 @@ body, h1, h2, h3, h4, h5, h6 {
 .card:hover {
     transform: translateY(-5px); /* Ahora salta 5px (antes 3px) */
 }
+
+/* ========================================================================= */
+/* 4. DISEÑO DE BOTONES (Paso 55) */
+/* ========================================================================= */
+
+/* 4.1 Botón Primario */
+.btn-primary {
+    /* Estilos generales */
+    background-color: #3b5998; /* Azul sólido */
+    border-color: #3b5998;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    /* Efecto al interactuar */
+    background-color: #2d4373; /* Azul más oscuro */
+    border-color: #2d4373;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 4.2 Botón Secundario (Outline Light) */
+.btn-outline-light {
+    /* Estilos generales para que se vea bien en la barra CLARA */
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    /* Corrección de color de texto para el fondo CLARO */
+    color: #3b5998;
+    border-color: #3b5998;
+}
+
+.btn-outline-light:hover,
+.btn-outline-light:focus {
+    /* Estilos al pasar el ratón o enfocar */
+    color: white; /* El texto se vuelve blanco */
+    background-color: #3b5998; /* El fondo se llena del color primario */
+    border-color: #3b5998;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
