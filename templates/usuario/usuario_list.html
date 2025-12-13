@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Usuarios{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Gestión de Usuarios</h1>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Email</th>
+            <th>Grupo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.username }}</td>
+            <td>{{ usuario.email }}</td>
+
+            <!-- CAMBIO DE GRUPO -->
+            <td>
+                <form method="post"
+                      action="{% url 'apps.usuario:usuario_update_group' usuario.id %}"
+                      class="d-flex gap-2">
+                    {% csrf_token %}
+
+                    <select name="grupo" class="form-select form-select-sm">
+                        <option value="">Sin grupo</option>
+                        <option value="Miembro"
+                            {% if usuario.groups.all.0.name == 'Miembro' %}selected{% endif %}>
+                            Miembro
+                        </option>
+                        <option value="Colaborador"
+                            {% if usuario.groups.all.0.name == 'Colaborador' %}selected{% endif %}>
+                            Colaborador
+                        </option>
+                    </select>
+
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        Actualizar
+                    </button>
+                </form>
+            </td>
+
+            <!-- ELIMINAR -->
+            <td>
+                {% if not usuario.is_superuser %}
+                <form method="post"
+                      action="{% url 'apps.usuario:usuario_delete' usuario.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Eliminar
+                    </button>
+                </form>
+                {% else %}
+                    <span class="text-muted">Admin</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
