@@ -4,56 +4,57 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="my-4">Artículos del Blog</h1>
+    <h1 class="my-4" style="color: #ffc400 !important;">Artículos del Blog</h1>
 
     
-    <div class="card p-3 mb-4 shadow-sm bg-transparent text-warning border-0 card-sin-hover"> <form method="get" action="{% url 'apps.articulo:lista_articulos' %}" class="row g-3 align-items-end">
+    <div class="card p-3 mb-4 shadow-sm bg-transparent text-warning border-0 card-sin-hover"> 
+        <form method="get" action="{% url 'apps.articulo:lista_articulos' %}" class="row g-3 align-items-end">
 
-    {# FILTRO POR CATEGORÍA #}
-<div class="col-md-4">
-    <label for="id_categoria" class="form-label small fw-bold">Filtrar por Categoría:</label>
-    <select name="categoria" id="id_categoria" class="form-select form-select-sm">
-        <option value="">Todas las categorías</option> 
-        {% for cat in categorias %}
-        <option value="{{ cat.pk }}" 
-            {% if cat.pk|add:'' == filtro_categoria_actual.pk %}selected{% endif %}>
-            {{ cat.nombre }}              
-        </option>
-        {% endfor %}
-    </select>
-</div>
-            {# ORDENAR POR (Antigüedad / Alfabético) #}
-            <div class="col-md-4">
-                <label for="id_orden" class="form-label small fw-bold">Ordenar por:</label>
-                <select name="orden" id="id_orden" class="form-select form-select-sm">
-                    
-                    {# La sintaxis perfecta para mantener la selección #}
-                    <option value="fecha_desc" {% if orden_actual == 'fecha_desc' %}selected{% endif %}>
-                        Antigüedad (Más Nuevo)
-                    </option>
-                    
-                    <option value="fecha_asc" {% if orden_actual == 'fecha_asc' %}selected{% endif %}>
-                        Antigüedad (Más Antiguo)
-                    </option>
-                    
-                    <option value="titulo_asc" {% if orden_actual == 'titulo_asc' %}selected{% endif %}>
-                        Título (A - Z)
-                    </option>
-                    
-                    <option value="titulo_desc" {% if orden_actual == 'titulo_desc' %}selected{% endif %}>
-                        Título (Z - A)
-                    </option>
-                </select>
-            </div>
+        {# FILTRO POR CATEGORÍA #}
+        <div class="col-md-4">
+            <label for="id_categoria" class="form-label small fw-bold" style="color: #ffc400 !important;">Filtrar por Categoría:</label>
+            <select name="categoria" id="id_categoria" class="form-select form-select-sm">
+                <option value="">Todas las categorías</option> 
+                {% for cat in categorias %}
+                <option value="{{ cat.pk }}" 
+                    {% if cat.pk|add:'' == filtro_categoria_actual.pk %}selected{% endif %}>
+                    {{ cat.nombre }}              
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        {# ORDENAR POR (Antigüedad / Alfabético) #}
+        <div class="col-md-4">
+             <label for="id_orden" class="form-label small fw-bold" style="color: #ffc400 !important;">Ordenar por:</label>
+            <select name="orden" id="id_orden" class="form-select form-select-sm">
+                
+                {# La sintaxis perfecta para mantener la selección #}
+                <option value="fecha_desc" {% if orden_actual == 'fecha_desc' %}selected{% endif %}>
+                    Antigüedad (Más Nuevo)
+                </option>
+                
+                <option value="fecha_asc" {% if orden_actual == 'fecha_asc' %}selected{% endif %}>
+                    Antigüedad (Más Antiguo)
+                </option>
+                
+                <option value="titulo_asc" {% if orden_actual == 'titulo_asc' %}selected{% endif %}>
+                    Título (A - Z)
+                </option>
+                
+                <option value="titulo_desc" {% if orden_actual == 'titulo_desc' %}selected{% endif %}>
+                    Título (Z - A)
+                </option>
+            </select>
+        </div>
 
-            <div class="col-md-4 d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary btn-sm me-2">
-                    <i class="bi bi-funnel"></i> Aplicar Filtros
-                </button>
-                <a href="{% url 'apps.articulo:lista_articulos' %}" class="btn btn-outline-secondary btn-sm">
-                    <i class="bi bi-x-circle"></i> Limpiar Filtros
-                </a>
-            </div>
+        <div class="col-md-4 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary btn-sm me-2">
+                <i class="bi bi-funnel"></i> Aplicar Filtros
+            </button>
+            <a href="{% url 'apps.articulo:lista_articulos' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-x-circle"></i> Limpiar Filtros
+            </a>
+        </div>
             
         </form>
     </div>
@@ -102,18 +103,23 @@
                         {# COLUMNA 2: TEXTO Y METADATOS #}
                         <div class="{% if articulo.imagen %}col-md-9{% else %}col-md-12{% endif %}">
 
-                            <h3 class="card-title mb-2">
+                            <h5 class="card-title mb-2">
                                 <a href="{% url 'apps.articulo:detalle_articulo' pk=articulo.pk %}"
-                                    class="text-decoration-none">
+                                    class="text-decoration-none text-dark" 
+                                    style="color: #ffc400 !important;">
                                     {{ articulo.titulo }}
                                 </a>
-                            </h3>
-                            <h5 class="card-text">
-                                {{ articulo.categoria }}
                             </h5>
-                            <p class="card-text text-muted small mb-2">
-                                Publicado por: {{ articulo.editor.username }} el
-                                <strong>{{ articulo.fecha_publicacion|date:"d M, Y" }}</strong>
+                            
+                            <p class="card-text small mb-2 text-muted"> {# <--- ¡CORREGIDO! Eliminado style="color: #ffffff !important;" #}
+                                Publicado por: 
+                                <strong style="color: #ffc400 !important;">{{ articulo.editor.username }}</strong> el
+                                <strong style="color: #ffc400 !important;">{{ articulo.fecha_publicacion|date:"d M, Y" }}</strong>
+                                {% if articulo.categoria %}
+                                <span class="badge bg-success ms-2">
+                                    {{ articulo.categoria.nombre }}
+                                </span>
+                                {% endif %}
                             </p>
 
 
@@ -134,7 +140,7 @@
                                 {% endif %}
 
                                 <a href="{% url 'apps.articulo:detalle_articulo' pk=articulo.pk %}"
-                                    class="btn btn-sm btn-success"> Leer más
+                                    class="btn btn-sm btn-outline-dark"> Leer más
                                 </a>
                             </div>
 

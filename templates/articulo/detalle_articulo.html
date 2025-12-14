@@ -15,7 +15,8 @@
     }
 
     .article-header {
-        border-bottom: 1px solid #eee;
+        /* Se hizo la línea divisoria más oscura para que se vea sobre el fondo oscuro */
+        border-bottom: 1px solid #444; 
         padding-bottom: 1.5rem;
         margin-bottom: 2rem;
     }
@@ -29,15 +30,14 @@
     <div class="row">
         <div class="col-lg-10 col-xl-8 mx-auto">
 
-            <!-- ARTÍCULO -->
-            <div class="card shadow-lg p-4 p-md-5 mb-5 border-0">
+            <div class="card shadow-lg p-4 p-md-5 mb-5 border-0 bg-dark"> 
 
                 <header class="text-center article-header">
-                    <h1 class="display-5 fw-bolder mb-3">
+                    <h1 class="display-5 fw-bolder mb-3" style="color: #ffc400 !important;">
                         {{ articulo.titulo }}
                     </h1>
 
-                    <p class="text-muted small mb-0">
+                    <p class="text-secondary small mb-0">
                         <i class="bi bi-person-fill"></i>
                         {{ articulo.editor.username }}
                         |
@@ -61,12 +61,11 @@
                 </div>
                 {% endif %}
 
-                <div class="article-content text-dark mt-4">
+                <div class="article-content mt-4"> 
                     {{ articulo.contenido|linebreaksbr }}
                 </div>
             </div>
 
-            <!-- ACCIONES -->
             <div class="d-flex justify-content-between align-items-center action-bar border-top border-bottom mb-5">
                 <a href="{% url 'apps.articulo:lista_articulos' %}" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Volver
@@ -88,15 +87,14 @@
                 {% endif %}
             </div>
 
-            <!-- COMENTARIOS -->
-            <div class="mt-5 pt-4">
-                <h3 class="fw-bold mb-4">
+            <div class="mt-5 pt-4 text-white"> 
+                <h3 class="fw-bold mb-4" style="color: #ffc400 !important;">
                     Comentarios ({{ comentarios_data|length }})
                 </h3>
 
                 {% if user.is_authenticated and comentario_form %}
-                <div class="card shadow-sm border-0 mb-5">
-                    <div class="card-header bg-light fw-semibold">
+                <div class="card shadow-sm border-0 mb-5 bg-dark"> 
+                    <div class="card-header bg-dark fw-semibold" style="color: #ffc400 !important;">
                         Dejá tu opinión
                     </div>
 
@@ -123,17 +121,16 @@
                 </div>
                 {% endif %}
 
-                <!-- LISTA DE COMENTARIOS -->
                 {% for data in comentarios_data %}
                 {% with comentario=data.comentario can_manage=data.can_manage %}
 
-                <div class="card mb-3 shadow-sm border-0">
+                <div class="card mb-3 shadow-sm border-0 bg-dark"> 
                     <div class="card-body">
 
                         <div class="d-flex justify-content-between mb-2">
                             <div>
-                                <strong>{{ comentario.usuario.username }}</strong><br>
-                                <small class="text-muted">
+                                <strong style="color: #ffc400 !important;">{{ comentario.usuario.username }}</strong><br>
+                                <small class="text-secondary">
                                     {{ comentario.fecha|date:"d M Y · H:i" }}
                                 </small>
                             </div>
@@ -173,7 +170,6 @@
     </div>
 </div>
 
-<!-- MODAL DESACTIVAR ARTÍCULO -->
 <div class="modal fade" id="confirmDeleteModal{{ articulo.pk }}" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -198,4 +194,58 @@
         </div>
     </div>
 </div>
+
+{% for data in comentarios_data %}
+    {% with comentario=data.comentario can_manage=data.can_manage %}
+    {% if can_manage %}
+        <div class="modal fade" id="editComentarioModal{{ comentario.pk }}" tabindex="-1" aria-labelledby="editComentarioModalLabel{{ comentario.pk }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editComentarioModalLabel{{ comentario.pk }}">Editar Comentario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="post" action="{% url 'apps.articulo:editar_comentario' pk=comentario.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <textarea name="texto" class="form-control" rows="3">{{ comentario.texto }}</textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirmDeleteComentarioModal{{ comentario.pk }}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmar Eliminación</h5>
+                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        ¿Seguro que deseas eliminar este comentario?
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+                        <form method="post"
+                              action="{% url 'apps.articulo:eliminar_comentario' pk=comentario.pk %}">
+                            {% csrf_token %}
+                            <button class="btn btn-danger">Sí, eliminar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+    {% endwith %}
+{% endfor %}
+
 {% endblock %}
