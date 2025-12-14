@@ -1,16 +1,11 @@
 /*
  * 1. REGLAS DE CONFIGURACIÓN Y FONDO ÚNICO DE CIBERSEGURIDAD
  */
-
-/* Establece el fondo principal de la web */
 body {
     background-color: #121212; 
-    /* Color base del texto a Naranja Oscuro */
     color: #e0a800; 
     margin: 0;
     padding: 0;
-
-    /* Aplica la imagen de fondo ÚNICA y la configura */
     background-image: url('../img/fondo_body.png'); 
     background-repeat: no-repeat; 
     background-attachment: fixed; 
@@ -43,7 +38,6 @@ body, h1, h2, h3, h4, h5, h6 {
     background-color: #1f1f1f; 
     border: 2px solid #ffc400; 
     color: #ffffff !important; 
-    /* Sombra de texto para alto contraste en TODO el contenido de la tarjeta */
     text-shadow: 0 0 8px #000000, 0 0 15px #000000; 
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 
                 0 12px 30px rgba(0, 0, 0, 0.15);
@@ -53,9 +47,7 @@ body, h1, h2, h3, h4, h5, h6 {
     transform: translateY(-5px); 
 }
 
-/* ========================================================================= */
 /* 4. AJUSTES DE CONTRASTE Y NAVBAR */
-/* ========================================================================= */
 
 /* 4.1. Bloque de Bienvenida (Jumbotron) - Transparencia y Borde */
 .bg-light {
@@ -68,22 +60,16 @@ body, h1, h2, h3, h4, h5, h6 {
 .bg-light h1 { 
     color: #ffc400 !important; 
     font-weight: 700;
-    /* Sombra Negra Densa y Concentrada (Simple) */
     text-shadow: 0 0 8px #000000, 0 0 15px #000000; 
 }
 
-/* FIX: Estilo para el texto del Hero (p) - SOLUCIÓN PARA UNA SOLA LÍNEA */
 .bg-light .text-muted { 
     color: #ffc400 !important; 
     font-weight: 700;
-    /* Sombra Negra Densa y Concentrada (Simple) */
     text-shadow: 0 0 8px #000000, 0 0 15px #000000;
-    
-    /* === FIX: FORZAR UNA SOLA LÍNEA === */
     white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis;
-    /* =========================================== */
 }
 
 
@@ -119,7 +105,6 @@ body, h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* FIX: Estilo de ENFOQUE para botón de contorno (Añadido) */
 .btn-outline-success:focus {
     box-shadow: 0 0 0 0.25rem rgba(255, 196, 0, 0.5) !important; 
     border-color: #ffc400 !important;
@@ -139,32 +124,26 @@ body, h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-success:hover,
-.btn-success:active { /* ESTILO ACTIVO CONSERVADO */
+.btn-success:active { 
     background-color: #e0ac00 !important; 
     border-color: #e0ac00 !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* FIX: Estilo de ENFOQUE para botón de relleno (Reforzado para anular el verde) */
 .btn-success:focus,
 button[type="submit"].btn-success:focus { 
     box-shadow: 0 0 0 0.25rem rgba(255, 196, 0, 0.5) !important; 
     border-color: #ffc400 !important;
 }
 
-/* *************************************************************** */
-/* FIX: Corregir sombra negra en el texto negro de los botones de relleno */
 .btn-success,
 .btn-primary {
     text-shadow: none !important; 
 }
-/* *************************************************************** */
 
 
-/* ========================================================================= */
 /* 5. DISEÑO DE ELEMENTOS DE CONTENIDO */
-/* ========================================================================= */
 
 /* 5.1 Estilo para títulos de sección (h3) */
 h3,
@@ -176,16 +155,12 @@ h3.mb-3 {
     margin-bottom: 20px !important;
 }
 
-/* 5.2 Estilo para Badges (¡SOLUCIÓN SIMPLE APLICADA: APUNTA A LA CLASE GENERAL!) */
+/* 5.2 Estilo para Badges */
 .badge { 
     background-color: #ffc400 !important; 
     color: #121212 !important; 
     font-weight: 700;
 }
-
-/* 5.3 Estilo para enlaces de Categorías (REMOVIDO Y REEMPLAZADO POR 5.8) */
-/* .card .btn-outline-secondary { ... } */
-
 
 /* 5.8 ESTILO PARA ENLACES DE CATEGORÍA (LIST-GROUP-ITEM) */
 .list-group-item.list-group-item-action {
@@ -195,28 +170,26 @@ h3.mb-3 {
     font-weight: 500;
 }
 
-/* Estado Hover (para que se rellene de Ámbar al pasar el mouse) */
+/* Estado Hover */
 .list-group-item.list-group-item-action:hover {
     background-color: #ffc400 !important; 
     color: #121212 !important; 
 }
-/* ========================================================================= */
 
-/* 5.9 Estilo para el Contenido Principal del Artículo (¡NUEVA REGLA!) */
+/* 5.9 Estilo para el Contenido Principal del Artículo */
 .article-content {
-    color: #e0a800 !important; /* Forzar color Naranja Oscuro al texto del artículo */
-    font-size: 1.1rem; /* Aumentar un poco el tamaño */
-    line-height: 1.6; /* Mejorar el interlineado */
+    color: #e0a800 !important; 
+    font-size: 1.1rem; 
+    line-height: 1.6; 
 }
-/* ========================================================================= */
 
 
-/* 5.4 Estilo para elementos de Formulario (REVERTIDO A VERSIÓN SIMPLE) */
+/* 5.4 Estilo para elementos de Formulario */
 input.form-control, 
 select.form-control, 
 textarea.form-control {
-    background-color: #1f1f1f !important; /* Gris Oscuro FORZADO (Punto 4) */
-    color: #ffffff !important; /* Letras blancas FORZADAS (Punto 5) */
+    background-color: #1f1f1f !important; 
+    color: #ffffff !important; 
     border: 1px solid #ffc400 !important;
 }
 
@@ -230,12 +203,11 @@ textarea.form-control:focus {
 }
 
 
-/* 5.5 Botón Primario (Corregido a estilo ÁMBAR/Negro) */
+/* 5.5 Botón Primario */
 .btn-primary {
-    /* **COMIENZO DEL REEMPLAZO** */
     background-color: #ffc400 !important; 
     border-color: #ffc400 !important;
-    color: #121212 !important; /* Texto negro */
+    color: #121212 !important; 
     font-family: 'Rajdhani', sans-serif;
     font-weight: 600;
     text-transform: uppercase;
@@ -249,38 +221,35 @@ textarea.form-control:focus {
     border-color: #e0ac00 !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /* **FIN DEL REEMPLAZO** */
 }
 
-/* 5.6 Botón Secundario (btn-outline-light / btn-outline-dark CORREGIDO) */
+/* 5.6 Botón Secundario */
 .btn-outline-light,
-.btn-outline-dark { /* <-- Añadido btn-outline-dark */
+.btn-outline-dark { 
     font-family: 'Rajdhani', sans-serif;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: all 0.3s ease;
     
-    /* FIX: Hacemos todos los outlines de la tarjeta ámbar */
     color: #ffc400 !important; 
     border-color: #ffc400 !important;
 }
 
 .btn-outline-light:hover,
 .btn-outline-light:focus,
-.btn-outline-dark:hover, /* <-- Añadido btn-outline-dark */
-.btn-outline-dark:focus { /* <-- Añadido btn-outline-dark */
-    color: #121212 !important; /* Negro en hover */
-    background-color: #ffc400 !important; /* Relleno ámbar en hover */
+.btn-outline-dark:hover,
+.btn-outline-dark:focus {
+    color: #121212 !important; 
+    background-color: #ffc400 !important; 
     border-color: #ffc400 !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* 5.7 FIX DE RESUMEN: Refuerzo de color para el resumen del artículo */
+/* 5.7 Refuerzo de color para el resumen del artículo */
 .card .card-text {
     color: #e0a800 !important; 
-    /* text-shadow: none !important; *//* La sombra ya está en el selector .card */
 }
 
 /* 6. FIX DE LAYOUT */
@@ -289,16 +258,14 @@ textarea.form-control:focus {
     flex-wrap: wrap !important;
 }
 
-/* ========================================================================= */
-/* 7. ESTILOS ESPECÍFICOS DEL PIE DE PÁGINA (FOOTER) - Paso 75 */
-/* ========================================================================= */
+/* 7. ESTILOS ESPECÍFICOS DEL PIE DE PÁGINA (FOOTER) */
 
 footer {
-    /* Forzamos el color base del texto a Naranja Oscuro */
     color: #e0a800 !important; 
+    padding: 10px 0 0 !important;
 }
 
-/* Regla para forzar que los títulos del footer sean de color de acento (Brillante) */
+/* Regla para forzar que los títulos del footer sean de color de acento */
 footer h1,
 footer h2,
 footer h3,
@@ -315,9 +282,10 @@ footer span {
     color: #e0a800 !important;
 }
 
-/* <<< CAMBIO CLAVE (Paso 75): Forzamos el color de copyright/última línea */
 .text-center.py-4 {
     color: #e0a800 !important; 
+    padding-top: 5px !important; 
+    padding-bottom: 5px !important; 
 }
 
 
@@ -325,20 +293,18 @@ footer span {
 footer a,
 footer a:link,
 footer a:visited {
-    color: #ffc400 !important; /* Color de acento para todos los estados base */
+    color: #ffc400 !important; 
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 footer a:hover {
-    color: #ffffff !important; /* Blanco al pasar el mouse */
+    color: #ffffff !important; 
 }
 
-
-/* Asegura que todos los elementos internos hereden ese color si no tienen una regla más específica */
+/* Asegura que todos los elementos internos hereden ese color */
 footer * {
-    /* color: inherit;  <-- Comentado para evitar conflictos de herencia forzada */
-    color: #e0a800; /* Usamos el color de base del footer para asegurar que todo sea visible */
+    color: #e0a800; 
 }
 
 
@@ -348,55 +314,36 @@ footer .text-muted,
 footer .text-secondary {
     color: #ffc400 !important; 
 }
-/* ========================================================================= */
-/* 7. ESTILOS ESPECÍFICOS DEL PIE DE PÁGINA (FOOTER) - Ajuste de tamaño */
-/* ========================================================================= */
-
-footer {
-    /* Forzamos el color base del texto a Naranja Oscuro */
-    color: #e0a800 !important; 
-    padding: 10px 0 0 !important; /* Reducimos el relleno superior (10px) y quitamos el relleno inferior */
-}
 
 /* Reducir el relleno en las columnas principales del footer */
 footer .col-md-3,
 footer .col-lg-4,
 footer .col-12 {
-    padding-top: 5px !important; /* Reducimos el espacio superior de cada columna */
-    padding-bottom: 5px !important; /* Reducimos el espacio inferior de cada columna */
-}
-
-/* Reducir el relleno en la sección de Copyright (text-center) */
-.text-center.py-4 {
-    padding-top: 5px !important; /* Reducimos el padding superior */
-    padding-bottom: 5px !important; /* Reducimos el padding inferior */
+    padding-top: 5px !important; 
+    padding-bottom: 5px !important; 
 }
 
 
 /* 8. ESTILO ESPECÍFICO - CONTENEDORES DE COLUMNAS ACERCA DE */
 .columna-acerca {
-    background-color: rgba(0, 0, 0, 0.85); /* Negro con 85% de opacidad */
+    background-color: rgba(0, 0, 0, 0.85); 
     padding: 20px;
-    border-radius: 8px; /* Opcional: bordes redondeados */
-    border: 1px solid rgba(255, 196, 0, 0.2); /* Borde sutil del color de acento */
+    border-radius: 8px; 
+    border: 1px solid rgba(255, 196, 0, 0.2); 
 }
 
 
-/* ========================================================================= */
-/* 9. FIX: ESTILOS AÑADIDOS PARA LA PÁGINA DE ARTÍCULOS */
-/* ========================================================================= */
+/* 9. ESTILOS AÑADIDOS PARA LA PÁGINA DE ARTÍCULOS */
 
-/* 9.1 FIX: Estilo para Contenedor de Filtros (Transparente y sin hover) */
+/* 9.1 Estilo para Contenedor de Filtros (Transparente y sin hover) */
 .card-sin-hover {
     transition: none !important; 
     transform: none !important;
-    /* Da la sombra y el borde que deseas */
     box-shadow: 0 0 10px rgba(255, 196, 0, 0.3) !important; 
     border: 1px solid rgba(255, 196, 0, 0.2); 
 }
 
 .card-sin-hover:hover {
-    /* Anula el efecto flotante al pasar el mouse */
     transform: none !important; 
     box-shadow: 0 0 10px rgba(255, 196, 0, 0.3) !important;
 }
@@ -404,11 +351,10 @@ footer .col-12 {
 
 /* 9.2 ESTILO ALERTA: Hacemos las alertas transparentes y con estilo ámbar */
 .alert {
-    /* Esto soluciona el fondo celeste y lo hace transparente */
     background-color: transparent !important; 
-    color: #ffc400 !important; /* Texto ámbar */
-    border: 1px solid rgba(255, 196, 0, 0.4) !important; /* Borde ámbar */
-    box-shadow: 0 0 10px rgba(255, 196, 0, 0.3); /* Sombra ámbar */
+    color: #ffc400 !important; 
+    border: 1px solid rgba(255, 196, 0, 0.4) !important; 
+    box-shadow: 0 0 10px rgba(255, 196, 0, 0.3); 
 }
 
 .alert i {
@@ -416,9 +362,7 @@ footer .col-12 {
 }
 
 
-/* ========================================================================= */
-/* 11. FIX: Eliminar el espacio superior del Navbar */
-/* ========================================================================= */
+/* 11. ANULACIÓN DE BOOTSTRAP: ELIMINAR ESPACIO SUPERIOR DEL NAVBAR */
 
 .navbar {
     margin-top: 0 !important;
@@ -427,134 +371,106 @@ footer .col-12 {
 }
 
 
-/* ========================================================================= */
-/* 12. ESTILOS ESPECÍFICOS: PÁGINA DE LOGIN/REGISTRO (REFORZADO) */
-/* ========================================================================= */
+/* 12. ESTILOS ESPECÍFICOS: PÁGINA DE LOGIN/REGISTRO */
 
-/* Apuntamos al contenedor principal, asegurando los puntos 2 y 3 */
+/* Apuntamos al contenedor principal */
 .col-md-5.login-form-container {
-    /* (Punto 2) Fondo negro con 15% de opacidad */
-    background-color: rgba(0, 0, 0, 0.15) !important; /* Reforzado */
+    background-color: rgba(0, 0, 0, 0.15) !important; 
     padding: 30px;
     border-radius: 10px;
     border: 1px solid rgba(255, 196, 0, 0.1); 
 }
 
-/* (Punto 3 y 1) Título */
+/* Título */
 .col-md-5.login-form-container h2 {
-    /* (Punto 1) Aumenta el tamaño de la fuente */
-    font-size: 1.8rem !important; /* Reforzado */
-    /* (Punto 3) Sombra al texto */
+    font-size: 1.8rem !important; 
     text-shadow: 0 0 8px #000000, 0 0 15px #000000;
     color: #ffc400 !important;
 }
 
-/* (Punto 1 y 3) Etiquetas (Labels) - MANTENEMOS ESTA REGLA DE ESTILO DEL BLOQUE 12 */
-.form-group label, /* Selector más general para asegurar que funcione */
+/* Etiquetas (Labels) */
+.form-group label, 
 .col-md-5.login-form-container label {
-    /* (Punto 1) Aumenta el tamaño de la fuente */
-    font-size: 1.1rem !important; /* Reforzado */
+    font-size: 1.1rem !important; 
     color: #ffc400 !important; 
-    /* (Punto 3) Sombra al texto */
     text-shadow: 0 0 5px #000000;
 }
 
-/* === AÑADIDO: Solución al punto 2 (Enlace de "Inicia Sesión") === */
+/* Enlace de "Inicia Sesión" */
 .col-md-5.login-form-container p a {
-    color: #ffc400 !important; /* Color de acento */
+    color: #ffc400 !important; 
     text-decoration: none;
     font-weight: 600;
 }
 
 .col-md-5.login-form-container p a:hover {
-    color: #ffffff !important; /* Blanco al pasar el mouse */
+    color: #ffffff !important; 
 }
-/* ========================================================================= */
 
 
-/* 13. FIX DE ESPACIADO PARA FORMULARIO DE REGISTRO */
+/* 13. ESPACIADO PARA FORMULARIO DE REGISTRO */
 .login-form-container .form-group {
     margin-bottom: 15px !important; 
     padding: 0;
 }
 
 
-/* 14. FIX DE VISIBILIDAD DE TEXTO EN FORMULARIOS OSCUROS (CORRECCIÓN FINAL) */
-/* Soluciona los puntos 1, 2 y 3: Texto aclaratorio (form-text) en Naranja Brillante (#ffc400) */
+/* 14. VISIBILIDAD DE TEXTO EN FORMULARIOS OSCUROS */
 .login-form-container .form-text {
     color: #ffc400 !important; 
     font-weight: 600;
-    /* Aseguramos que la sombra negra para el contraste siga funcionando */
     text-shadow: 0 0 5px #000000; 
 }
 
 
-/* 15. ESTILO PARA CAMPO DE SELECCIÓN DE ARCHIVO (Revertido a versión estable) */
-/* Soluciona el punto 4: Botón de archivo (input type="file") con relleno negro */
+/* 15. CAMPO DE SELECCIÓN DE ARCHIVO */
 .login-form-container input[type="file"] {
-    background-color: #1f1f1f !important; /* Fondo gris oscuro */
-    color: #ffffff !important; /* Letra blanca (texto "Ningún archivo seleccionado") */
-    border: 1px solid #ffc400 !important; /* Borde con tu color de acento */
+    background-color: #1f1f1f !important; 
+    color: #ffffff !important; 
+    border: 1px solid #ffc400 !important; 
     padding: 5px; 
 }
 
-/* Regla para asegurar que el botón 'Seleccionar archivo' se vea oscuro */
 .login-form-container .form-control[type="file"] {
     background-color: #1f1f1f !important;
 }
 
 
-/* 16. FIX FINAL DE COLOR PARA BOTÓN 'SELECCIONAR ARCHIVO' (Revertido a versión estable) */
+/* 16. COLOR PARA BOTÓN 'SELECCIONAR ARCHIVO' */
 .login-form-container input[type="file"]::file-selector-button {
-    /* Forzamos el fondo del botón interno a gris oscuro */
     background-color: #1f1f1f !important;
-    /* Mantenemos el color por defecto (suele ser negro o heredado) */
     color: #ffffff !important; 
-    /* Borde ámbar para mantener la estética y separarlo del nombre del archivo */
     border-right: 1px solid #ffc400 !important; 
 }
 
 
-/* 17. REFUERZO DE VISIBILIDAD DE FILTROS (Solución para el Punto 5) */
-/* Esto asegura que las etiquetas de "Filtrar por Categoría" y "Ordenar por" sean visibles */
+/* 17. REFUERZO DE VISIBILIDAD DE FILTROS */
 .card-sin-hover label {
     color: #ffc400 !important;
 }
 
-/* ========================================================================= */
 /* 18. ANULACIÓN DE BOOTSTRAP: ELIMINAR TEXTO NEGRO FORZADO EN TARJETAS (TÍTULOS) */
-/* ========================================================================= */
-
-/* Este selector tiene la especificidad máxima para anular text-dark en el título */
 .card .card-body .card-title a.text-dark {
-    color: #ffc400 !important; /* Forzar color de marca */
-    text-shadow: none !important; /* Eliminar cualquier sombra que oscurezcal el texto */
+    color: #ffc400 !important; 
+    text-shadow: none !important; 
 }
 
-/* ========================================================================= */
 /* 19. ANULACIÓN DEFINITIVA DE VISIBILIDAD: Metadatos y Botón */
-/* ========================================================================= */
 
-/* A) FIX Metadatos (Texto "Publicado por" y metadatos que no están en strong) */
-/* Anulamos la clase text-muted y forzamos el NARANJA OSCURO. */
+/* A) FIX Metadatos */
 .card-body p.card-text.text-muted {
-    color: #e0a800 !important; /* ¡CAMBIO A NARANJA OSCURO! */
+    color: #e0a800 !important; 
     text-shadow: none !important; 
 }
 
 /* B) FIX Botón "Leer Más" (btn-outline-dark) */
-/* Forzamos el color del botón "Leer Más" a Ámbar. */
 .card .card-body .btn-outline-dark {
     color: #ffc400 !important;
     border-color: #ffc400 !important;
-    text-shadow: none !important; /* Asegurar que no haya sombra que lo oscurezcal */
+    text-shadow: none !important; 
 }
 
-/* ========================================================================= */
 /* 20. ANULACIÓN EXTREMA DEL COLOR EN TÍTULOS DE ARTÍCULOS */
-/* ========================================================================= */
-/* FUERZA el color ÁMBAR BRILLANTE a CUALQUIER ENLACE que apunte a un artículo, */
-/* anulando de esta forma la clase 'text-dark' y cualquier otra herencia negra. */
 a[href*="/articulo/"] {
     color: #ffc400 !important;
 }
