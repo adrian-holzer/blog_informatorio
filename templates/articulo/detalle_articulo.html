@@ -3,35 +3,13 @@
 {% block title %}{{ articulo.titulo }}{% endblock %}
 
 {% block content %}
-<style>
-    .article-content {
-        line-height: 1.8;
-        font-size: 1.15rem;
-    }
 
-    .article-content p {
-        max-width: 75ch;
-        margin: 0 auto 1.5rem;
-    }
-
-    .article-header {
-        /* Se hizo la línea divisoria más oscura para que se vea sobre el fondo oscuro */
-        border-bottom: 1px solid #444; 
-        padding-bottom: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .action-bar {
-        padding: 1.5rem 0;
-    }
-</style>
 
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-10 col-xl-8 mx-auto">
 
             <div class="card shadow-lg p-4 p-md-5 mb-5 border-0 bg-dark"> 
-
                 <header class="text-center article-header">
                     <h1 class="display-5 fw-bolder mb-3" style="color: #ffc400 !important;">
                         {{ articulo.titulo }}
@@ -55,13 +33,13 @@
                 {% if articulo.imagen %}
                 <div class="d-flex justify-content-center mb-4">
                     <img src="{{ articulo.imagen.url }}"
-                         alt="{{ articulo.titulo }}"
-                         class="img-fluid rounded shadow-sm"
-                         style="max-width:300px; max-height:300px; object-fit:contain;">
+                             alt="{{ articulo.titulo }}"
+                             class="img-fluid rounded shadow-sm"
+                             style="max-width:300px; max-height:300px; object-fit:contain;">
                 </div>
                 {% endif %}
 
-                <div class="article-content mt-4"> 
+                <div class="article-content mt-4" style="color: white;"> 
                     {{ articulo.contenido|linebreaksbr }}
                 </div>
             </div>
@@ -136,7 +114,7 @@
                             </div>
 
                             {% if can_manage %}
-                            <div class="btn-group btn-group-sm">
+                            <div class="btn-group btn-group-sm d-flex gap-2"> 
                                 <button class="btn btn-outline-primary"
                                         data-bs-toggle="modal"
                                         data-bs-target="#editComentarioModal{{ comentario.pk }}">
@@ -196,17 +174,34 @@
 </div>
 
 {% for data in comentarios_data %}
-    {% with comentario=data.comentario can_manage=data.can_manage %}
+    {% with comentario=data.comentario can_manage=data.can_manage form_edit=data.form_edit %}
     {% if can_manage %}
         <div class="modal fade" id="editComentarioModal{{ comentario.pk }}" tabindex="-1" aria-labelledby="editComentarioModalLabel{{ comentario.pk }}" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content bg-dark text-white"> 
                     <div class="modal-header">
                         <h5 class="modal-title" id="editComentarioModalLabel{{ comentario.pk }}">Editar Comentario</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form method="post"
-                        action="{% url 'apps.comentario:editarComentario' pk_comentario=comentario.pk %}">
+                          action="{% url 'apps.comentario:editarComentario' pk_comentario=comentario.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            {% comment %} 
+                                Si estás utilizando un Formulario de edición de comentarios de Django, 
+                                asume que se llama 'form_edit' y tiene un campo 'texto'. 
+                                Si el formulario se llama 'form_comentario_edit', cámbialo aquí.
+                            {% endcomment %}
+                            {% if form_edit %}
+                                {{ form_edit.texto }} 
+                            {% else %}
+                                <textarea name="texto" rows="3" class="form-control">{{ comentario.texto }}</textarea>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -214,10 +209,10 @@
 
         <div class="modal fade" id="confirmDeleteComentarioModal{{ comentario.pk }}" tabindex="-1">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content bg-dark text-white">
                     <div class="modal-header">
                         <h5 class="modal-title">Confirmar Eliminación</h5>
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
 
                     <div class="modal-body">
@@ -227,16 +222,15 @@
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
 
-                  <form method="post"
-                        action="{% url 'apps.comentario:eliminarComentario' pk_comentario=comentario.pk %}">
-                    {% csrf_token %}
-                            <button class="btn btn-danger">Sí, eliminar</button>
-                        </form>
+                      <form method="post"
+                              action="{% url 'apps.comentario:eliminarComentario' pk_comentario=comentario.pk %}">
+                            {% csrf_token %}
+                                <button class="btn btn-danger">Sí, eliminar</button>
+                            </form>
                     </div>
                 </div>
             </div>
         </div>
-
     {% endif %}
     {% endwith %}
 {% endfor %}

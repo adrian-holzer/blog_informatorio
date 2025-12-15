@@ -40,12 +40,10 @@
                     <a class="nav-link" href="{% url 'apps.articulo:lista_articulos' %}">Artículos</a>
                 </li>
 
-                {# CONTACTO SOLO USUARIOS LOGUEADOS #}
-                {% if user.is_authenticated %}
+               
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'apps.contacto:contacto' %}">Contacto</a>
                 </li>
-                {% endif %}
             </ul>
 
             <ul class="navbar-nav">

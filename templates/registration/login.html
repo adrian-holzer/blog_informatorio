@@ -1,41 +1,81 @@
 {% extends 'base.html' %}
 
-{% block title %}Iniciar Sesión{% endblock %}
+{% block title %}Inicio - Ciberseguridad Informatorio{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-5 login-form-container"> <h2 class="mt-4 mb-3">Iniciar Sesión</h2>
-            
-            <form method="post">
-                {% csrf_token %}
-                
-                {# Mostrar errores del formulario (si el login falla) #}
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        Tu nombre de usuario o contraseña son incorrectos.
-                    </div>
-                {% endif %}
-                
-                {% for field in form %}
-                <div class="form-group mb-3">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                </div>
-                {% endfor %}
 
-                <button type="submit" class="btn btn-success btn-block">Ingresar</button>
-                
-                {# Campo oculto para la redirección después del login #}
-                {% if next %}
-                <input type="hidden" name="next" value="{{ next }}" />
-                {% endif %}
-            </form>
+<section class="mb-5">
+    <div class="p-5 text-center bg-dark bg-opacity-25 text-white rounded-4 shadow-lg">
+        <div class="container py-4">
+            <h1 class="display-5 fw-bold mb-3" style="color: #00ffc4;">
+                🛡️ Alertas y Análisis de Ciberseguridad
+            </h1>
 
-            
-            <p>
-                ¿No tienes cuenta? <a href="{% url 'apps.usuario:registrar' %}">Regístrate aquí</a>
+            <p class="fs-5 text-secondary">
+                Mantente al día con las **últimas amenazas, vulnerabilidades y estrategias de defensa** en el mundo digital. Tu fuente esencial para la seguridad informática.
             </p>
+            
+            {% if user.is_authenticated %}
+            <span class="badge bg-success fs-6 mt-3">
+                Estás conectado como: {{ user.username }}
+            </span>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-8">
+            <h3 class="mb-3" style="color: #00ffc4;">Últimos Reportes y Noticias</h3>
+
+            {% for articulo in object_list %}
+            <div class="card mb-4 shadow-sm bg-dark bg-opacity-25 text-white border-secondary">
+                {% if articulo.imagen %}
+                <a href="{% url 'apps.articulo:detalle_articulo' articulo.pk %}">
+                    <img src="{{ articulo.imagen.url }}" class="card-img-top" alt="{{ articulo.titulo }}"
+                        style="height: 300px; object-fit: cover;">
+                </a>
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'apps.articulo:detalle_articulo' articulo.pk %}"
+                            class="text-decoration-none" style="color: #00ffc4;">
+                            {{ articulo.titulo }}
+                        </a>
+                    </h5>
+
+                    <p class="card-text text-white small">
+                        <span class="badge bg-warning">{{ articulo.categoria.nombre }}</span>
+                        - Publicado por {{ articulo.editor.username }} el {{ articulo.fecha_publicacion|date:"d M Y" }}
+                    </p>
+                    <p class="card-text text-light">{{ articulo.resumen }}</p>
+
+                    <a href="{% url 'apps.articulo:detalle_articulo' articulo.pk %}"
+                        class="btn btn-sm btn-outline-info">Leer Mas &raquo;</a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="alert alert-info">Aún no hay artículos publicados.</p>
+            {% endfor %}
+
+        </div>
+        <div class="col-md-4">
+            <h3 class="mb-3" style="color: #00ffc4;">Temas de Seguridad</h3>
+
+            <div class="list-group shadow-sm bg-dark bg-opacity-25"> 
+                {% for categoria in categorias %}
+                <a href="{% url 'apps.articulo:lista_articulos' %}?categoria={{ categoria.id }}"
+                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-info bg-transparent border-secondary">
+                    {{ categoria.nombre }}
+                </a>
+                {% empty %}
+                <p class="alert alert-warning small">No hay categorías disponibles.</p>
+                {% endfor %}
+            </div>
+
         </div>
     </div>
 </div>
