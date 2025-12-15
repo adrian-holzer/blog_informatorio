@@ -205,15 +205,8 @@
                         <h5 class="modal-title" id="editComentarioModalLabel{{ comentario.pk }}">Editar Comentario</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="post" action="{% url 'apps.articulo:editar_comentario' pk=comentario.pk %}">
-                        {% csrf_token %}
-                        <div class="modal-body">
-                            <textarea name="texto" class="form-control" rows="3">{{ comentario.texto }}</textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                        </div>
+                    <form method="post"
+                        action="{% url 'apps.comentario:editarComentario' pk_comentario=comentario.pk %}">
                     </form>
                 </div>
             </div>
@@ -234,9 +227,9 @@
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
 
-                        <form method="post"
-                              action="{% url 'apps.articulo:eliminar_comentario' pk=comentario.pk %}">
-                            {% csrf_token %}
+                  <form method="post"
+                        action="{% url 'apps.comentario:eliminarComentario' pk_comentario=comentario.pk %}">
+                    {% csrf_token %}
                             <button class="btn btn-danger">Sí, eliminar</button>
                         </form>
                     </div>
